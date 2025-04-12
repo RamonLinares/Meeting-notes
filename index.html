@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meeting Notes</title>
+
+    <link rel="stylesheet" type="text/css" href="https://unpkg.com/trix@2.0.8/dist/trix.css">
+    <script type="text/javascript" src="https://unpkg.com/trix@2.0.8/dist/trix.umd.min.js"></script>
+
+    <style>
+        /* Reset and Base Styles */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6; background-color: #f0f2f5; color: #1c1e21;
+            padding-top: 80px; padding-bottom: 100px;
+        }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+
+        /* Header Styles */
+        .main-header {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 1010; display: flex;
+            align-items: center; padding: 10px 20px; background-color: #ffffff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1); gap: 15px;
+        }
+        .main-header h1 { font-size: 1.8rem; font-weight: 700; color: #000; margin-right: auto; }
+        .search-container { display: flex; align-items: center; background-color: #f0f2f5; border-radius: 20px; padding: 5px 10px; }
+        .search-container svg { width: 18px; height: 18px; stroke: #666; margin-right: 5px; }
+        #searchInput { border: none; background: none; outline: none; font-size: 0.95rem; padding: 5px; width: 180px; }
+        .menu-container { position: relative; }
+        #menuToggleBtn { background: none; border: none; cursor: pointer; padding: 8px; border-radius: 50%; }
+        #menuToggleBtn:hover { background-color: #f0f2f5; }
+        #menuToggleBtn svg { width: 24px; height: 24px; stroke: #555; }
+        .header-menu {
+            display: none; position: absolute; top: 100%; right: 0; background-color: white;
+            border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); border: 1px solid #e0e0e0;
+            min-width: 180px; z-index: 1011; overflow: hidden;
+        }
+        .header-menu.visible { display: block; }
+        .header-menu button { display: block; width: 100%; padding: 12px 18px; border: none; background: none; text-align: left; font-size: 0.95rem; cursor: pointer; color: #333; }
+        .header-menu button:hover { background-color: #f0f2f5; }
+        .header-menu button svg { width: 16px; height: 16px; margin-right: 8px; vertical-align: middle; stroke: #555; }
+        #importXmlInput { display: none; }
+
+        /* Notes Grid */
+        #notesGrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+
+        /* Note Card Styling */
+        .note-card {
+            background: #ffffff; border-radius: 12px; padding: 18px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08); border: 1px solid #e8e8e8;
+            display: flex; flex-direction: column; min-height: 120px;
+            transition: box-shadow 0.2s ease, border-color 0.2s ease;
+            position: relative;
+        }
+        .note-card.pinned, #virtualActionItemsCard { /* Style virtual card like pinned */
+             background-color: #f8f9fa;
+         }
+        .note-card:hover { box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12); }
+
+        .note-card h3 {
+            font-size: 1.1rem; font-weight: 600; margin-bottom: 10px; color: #1c1e21;
+            display: flex; align-items: center; padding-right: 10px;
+        }
+        /* Add specific swatch for virtual card */
+        #virtualActionItemsCard h3::before {
+            content: ''; display: inline-block; width: 12px; height: 12px;
+            border-radius: 3px; margin-right: 10px; flex-shrink: 0;
+            background-color: #6c757d; /* Gray */
+        }
+
+
+        /* Note Card Content Area */
+        .note-card .content-area {
+             font-size: 0.95rem; color: #555;
+             word-wrap: break-word;
+             margin-bottom: 15px;
+             line-height: 1.6;
+             /* flex-grow: 1; */ /* Let content dictate height */
+        }
+        /* Rich text styles */
+        .note-card .content-area ul:not(.interactive-list),
+        .note-card .content-area ol { margin-left: 25px; margin-top: 5px; margin-bottom: 10px; padding-left: 0; }
+        .note-card .content-area blockquote { border-left: 3px solid #ccc; padding-left: 10px; margin-left: 5px; color: #666; }
+        .note-card .content-area pre { background-color: #f0f0f0; padding: 10px; border-radius: 4px; white-space: pre-wrap; }
+        .note-card .content-area a { color: #007bff; text-decoration: underline; }
+
+        /* Interactive List Item Styles */
+        .note-card .content-area ul.interactive-list { list-style: none; padding: 0; margin: 10px 0 10px 0; }
+        .note-card .content-area li.interactive-list-item {
+            list-style: none; display: flex; align-items: flex-start;
+            margin-bottom: 5px; padding: 2px 0;
+        }
+         .note-card .content-area li.interactive-list-item.done span.list-item-text { text-decoration: line-through; color: #888; }
+        .note-card .content-area .list-item-checkbox {
+            margin-right: 10px; margin-top: 5px; flex-shrink: 0; cursor: pointer;
+            width: 16px; height: 16px; accent-color: #007bff;
+        }
+         .note-card .content-area .list-item-text { word-break: break-word; }
+         .note-card .content-area .list-item-context {
+             font-size: 0.8em;
+             color: #888;
+             margin-left: 8px; /* Space after text */
+             white-space: nowrap;
+             overflow: hidden;
+             text-overflow: ellipsis;
+             max-width: 100px; /* Limit context width */
+             opacity: 0.8;
+         }
+         .action-items-header {
+             font-size: 0.9em; font-weight: 600; color: #555;
+             margin-top: 15px; padding-top: 10px; border-top: 1px dashed #ddd;
+         }
+
+
+        /* Meta section styling */
+        .note-card .meta {
+            font-size: 0.8em; color: #888; padding-top: 12px; border-top: 1px solid #f0f0f0;
+            margin-top: auto; /* Push meta towards bottom */
+            display: flex; justify-content: space-between; flex-wrap: wrap; gap: 5px;
+        }
+         .note-card .meta span { white-space: nowrap; }
+
+        /* Card Actions */
+        .card-actions {
+            display: flex; justify-content: flex-end; gap: 8px; margin-top: 10px;
+            padding-top: 10px; border-top: 1px solid transparent;
+        }
+         .note-card .content-area + .card-actions:not(:has(~ .meta)),
+         .note-card h3 + .card-actions:not(:has(~ .content-area)):not(:has(~ .meta)) { border-top-color: #f0f0f0; }
+         .note-card .meta + .card-actions { border-top-color: transparent; padding-top: 0; margin-top: 5px; }
+
+        .card-actions button {
+            background-color: rgba(0, 0, 0, 0.05); color: #555; border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 50%; width: 28px; height: 28px; line-height: 28px; text-align: center;
+            cursor: pointer; font-weight: bold; font-size: 14px; padding: 0; display: flex;
+            align-items: center; justify-content: center; transition: all 0.2s ease;
+        }
+        .card-actions button:hover { background-color: rgba(0, 0, 0, 0.1); color: #000; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .card-actions button svg { width: 14px; height: 14px; stroke-width: 2; }
+        .pin-btn:hover { background-color: #fffbdd; color: #a08d00; }
+        .edit-btn:hover { background-color: #e2f0fe; color: #0056b3; }
+        .delete-btn:hover { background-color: #fde2e4; color: #c82333; }
+        .pin-btn.active svg { fill: #666; }
+
+
+        /* FAB */
+        .fab {
+            position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px;
+            background-color: #007bff; color: white; border: none; border-radius: 50%;
+            font-size: 28px; line-height: 60px; text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); cursor: pointer;
+            transition: background-color 0.2s ease, transform 0.2s ease; z-index: 1000;
+        }
+        .fab:hover { background-color: #0056b3; transform: scale(1.05); }
+        .fab:active { transform: scale(0.98); }
+
+        /* Modal */
+        .modal {
+            display: none; position: fixed; z-index: 1001; left: 0; top: 0;
+            width: 100%; height: 100%; background-color: rgba(0,0,0,0.5);
+            align-items: center; justify-content: center; padding: 20px;
+        }
+        .modal-content {
+            background-color: #fefefe; padding: 25px 30px; border: 1px solid #888;
+            width: 100%; max-width: 650px; border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2); position: relative;
+            max-height: 85vh; display: flex; flex-direction: column; overflow: hidden;
+        }
+        .modal-form-scrollable { overflow-y: auto; padding-right: 10px; margin-bottom: 15px; }
+        .modal-content h2 { text-align: left; margin-top: 0; margin-bottom: 20px; color: #333; flex-shrink: 0; }
+        .modal-content label { display: block; margin-bottom: 5px; font-weight: 600; color: #495057; }
+        .modal-content input[type="text"], .modal-content select, .modal-content input[type="date"] { width: 100%; padding: 10px 12px; margin-bottom: 15px; border: 1px solid #ced4da; border-radius: 4px; font-size: 1rem; }
+        .modal-content #noteActionItems { width: 100%; min-height: 120px; border: 1px solid #ced4da; border-radius: 4px; padding: 10px; font-family: inherit; font-size: 1rem; line-height: 1.6; resize: vertical; margin-bottom: 15px; }
+        .modal-content trix-editor { border: 1px solid #ced4da; border-radius: 4px; min-height: 150px; margin-bottom: 15px; background-color: white; padding: 10px; }
+        .modal-content trix-editor ul, .modal-content trix-editor ol { padding-left: 30px; margin-left: 10px; }
+        .modal-content trix-toolbar .trix-button-group { border-top-color: #ddd; border-bottom-color: #ddd; }
+        .modal-content trix-toolbar .trix-button { background-color: #f8f9fa; }
+        .modal-content trix-toolbar .trix-button:hover { background-color: #e9ecef; }
+        .modal-content trix-toolbar .trix-button.trix-active { background-color: #e2e6ea; }
+        .modal-buttons { display: flex; justify-content: flex-end; margin-top: auto; padding-top: 15px; flex-shrink: 0; }
+        .modal-buttons button { padding: 10px 20px; margin-left: 10px; border-radius: 5px; cursor: pointer; font-size: 1rem; font-weight: 500; border: none; }
+        #modalSaveBtn { background-color: #28a745; color: white; }
+        #modalSaveBtn:hover { background-color: #218838; }
+        #modalCancelBtn { background-color: #6c757d; color: white; }
+        #modalCancelBtn:hover { background-color: #5a6268; }
+        .close-btn { position: absolute; top: 10px; right: 15px; color: #aaa; font-size: 28px; font-weight: bold; cursor: pointer; line-height: 1; z-index: 1; }
+        .close-btn:hover, .close-btn:focus { color: black; text-decoration: none; }
+
+        /* Status Messages */
+        #status, #error { margin: 15px auto; padding: 10px 15px; border-radius: 4px; text-align: center; font-weight: 500; max-width: 600px; display: none; }
+        #status { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        #error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        #status:not(:empty), #error:not(:empty) { display: block; }
+
+        /* Utility */
+        .hidden { display: none; }
+
+    </style>
+</head>
+<body>
+    <header class="main-header">
+        <h1>Notes</h1>
+        <div class="search-container">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <input type="search" id="searchInput" placeholder="Search notes...">
+        </div>
+        <div class="menu-container">
+            <button id="menuToggleBtn" title="Menu">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg>
+            </button>
+            <div id="headerMenu" class="header-menu">
+                 <button id="exportXmlBtn">
+                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 15 12 20 7 15"></polyline><line x1="12" y1="20" x2="12" y2="3"></line></svg>
+                     Export to XML
+                 </button>
+                 <button id="importXmlBtn">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                      Import from XML
+                 </button>
+                 <input type="file" id="importXmlInput" accept=".xml, text/xml">
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div id="status"></div>
+         <div id="error"></div>
+
+        <div id="notesGrid">
+            <p>Loading notes...</p>
+        </div>
+    </div>
+
+    <button class="fab" id="addNoteFab" title="Add New Note">+</button>
+
+    <div id="noteModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" id="closeModalBtn">&times;</span>
+            <h2 id="modalTitle">Add New Note</h2>
+            <div class="modal-form-scrollable">
+                 <div>
+                    <label for="noteTitle">Title:</label>
+                    <input type="text" id="noteTitle" placeholder="Enter note title">
+                </div>
+                <div id="contentInputArea">
+                    <label for="noteContentHidden">Main Content (Optional):</label>
+                    <div id="trixEditorWrapper">
+                         <input id="noteContentHidden" type="hidden" name="content">
+                         <trix-editor input="noteContentHidden" placeholder="Write your main notes here..."></trix-editor>
+                    </div>
+                </div>
+                 <div id="actionItemsArea">
+                     <label for="noteActionItems">Action Items (Optional):</label>
+                     <textarea id="noteActionItems" placeholder="Enter action items, one per line..."></textarea>
+                </div>
+
+                <div id="deadlineGroup"> <label for="noteDeadline">Deadline (Optional):</label>
+                    <input type="date" id="noteDeadline">
+                </div>
+            </div> <div class="modal-buttons">
+                 <button id="modalCancelBtn">Cancel</button>
+                 <button id="modalSaveBtn">Save Note</button>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        // --- DOM Element References ---
+        const notesGrid = document.getElementById('notesGrid');
+        const addNoteFab = document.getElementById('addNoteFab');
+        const noteModal = document.getElementById('noteModal');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const modalSaveBtn = document.getElementById('modalSaveBtn');
+        const modalCancelBtn = document.getElementById('modalCancelBtn');
+        const modalTitle = document.getElementById('modalTitle');
+        // Removed: noteTypeSelect
+        const noteTitleInput = document.getElementById('noteTitle');
+        const contentInputArea = document.getElementById('contentInputArea');
+        // const mainContentLabel = document.getElementById('mainContentLabel');
+        const noteContentHiddenInput = document.getElementById('noteContentHidden');
+        const trixEditorWrapper = document.getElementById('trixEditorWrapper');
+        const trixEditorElement = document.querySelector("trix-editor");
+        const actionItemsArea = document.getElementById('actionItemsArea');
+        const noteActionItemsTextArea = document.getElementById('noteActionItems');
+        const deadlineGroup = document.getElementById('deadlineGroup');
+        const noteDeadlineInput = document.getElementById('noteDeadline');
+        const statusDiv = document.getElementById('status');
+        const errorDiv = document.getElementById('error');
+        const searchInput = document.getElementById('searchInput');
+        const menuToggleBtn = document.getElementById('menuToggleBtn');
+        const headerMenu = document.getElementById('headerMenu');
+        const exportXmlBtn = document.getElementById('exportXmlBtn');
+        const importXmlBtn = document.getElementById('importXmlBtn');
+        const importXmlInput = document.getElementById('importXmlInput');
+
+        // --- Application State ---
+        let notes = []; // Note: { title, createdAt, pinned, deadline?, content?, items? }
+        let currentlyEditingIndex = null;
+        const LOCAL_STORAGE_KEY = 'notesAppData';
+        const DRAFT_STORAGE_KEY = 'noteDraftData';
+
+        // --- Utility Functions ---
+        function clearMessages() { statusDiv.textContent = ''; errorDiv.textContent = ''; }
+        function showMessage(message, isError = false) { /* ... */
+             clearMessages(); const targetDiv = isError ? errorDiv : statusDiv; targetDiv.textContent = message; setTimeout(clearMessages, isError ? 5000 : 3000);
+        }
+        const escapeXML = (str) => { /* ... */
+            if (typeof str !== 'string') return ''; return str.replace(/[<>&'"]/g, char => { switch (char) { case '<': return '&lt;'; case '>': return '&gt;'; case '&': return '&amp;'; case '\'': return '&apos;'; case '"': return '&quot;'; default: return char; } });
+        };
+
+        // --- Local Storage Functions ---
+        function saveNotesToLocalStorage() { /* ... */
+             try { localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(notes)); } catch (error) { console.error("LS Save Error:", error); showMessage("Could not save notes.", true); }
+        }
+        function loadNotesFromLocalStorage() { /* ... (migration logic included) ... */
+             const storedNotes = localStorage.getItem(LOCAL_STORAGE_KEY); let loadedNotes = [];
+            if (storedNotes) { try { loadedNotes = JSON.parse(storedNotes); if (!Array.isArray(loadedNotes)) { loadedNotes = []; } loadedNotes = loadedNotes.map(note => { const migratedNote = { title: note.title || '', createdAt: note.createdAt || new Date().toISOString(), pinned: note.pinned || false, deadline: note.deadline || null, content: note.content || null, items: note.items || null }; if (note.type) { if ((note.type === 'todo' || note.type === 'shopping') && Array.isArray(note.items)) { migratedNote.items = note.items; migratedNote.content = null; } else if (note.type === 'meeting') { migratedNote.content = note.content || null; if (Array.isArray(note.meetingTodos)) { migratedNote.items = note.meetingTodos; } else if (!migratedNote.items) { migratedNote.items = []; } } else { migratedNote.content = note.content || null; migratedNote.items = null; } } if (migratedNote.items !== null && !Array.isArray(migratedNote.items)) { migratedNote.items = []; } return migratedNote; }); } catch (error) { console.error("LS Parse/Migration Error:", error); loadedNotes = []; } }
+             return loadedNotes.map(note => ({ title: note.title || '', createdAt: note.createdAt || new Date().toISOString(), pinned: note.pinned || false, deadline: note.deadline || null, content: note.content || null, items: Array.isArray(note.items) ? note.items : null }));
+        }
+
+        // --- Draft Handling ---
+        function saveDraft() { /* ... (unchanged) ... */
+            if (currentlyEditingIndex === null && noteModal.style.display === 'flex') {
+                const draftData = { title: noteTitleInput.value, content: trixEditorElement.editor.getDocument().toString(), itemsText: noteActionItemsTextArea.value, deadline: noteDeadlineInput.value, };
+                try { if (draftData.title.trim() || draftData.content.trim() || draftData.itemsText.trim()) { localStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify(draftData)); } else { localStorage.removeItem(DRAFT_STORAGE_KEY); } } catch (error) { console.error("Error saving draft:", error); }
+            }
+        }
+        function clearDraft() { localStorage.removeItem(DRAFT_STORAGE_KEY); }
+        function checkAndRestoreDraft() { /* ... (unchanged) ... */
+            const draftJson = localStorage.getItem(DRAFT_STORAGE_KEY);
+            if (draftJson) {
+                if (confirm("You have an unsaved draft. Restore it?")) {
+                    try {
+                        const draftData = JSON.parse(draftJson); noteTitleInput.value = draftData.title || ''; noteDeadlineInput.value = draftData.deadline || '';
+                        trixEditorElement.editor.loadHTML(draftData.content || ''); noteActionItemsTextArea.value = draftData.itemsText || ''; return true;
+                    } catch (error) { console.error("Error parsing draft:", error); clearDraft(); }
+                } else { clearDraft(); }
+            } return false;
+        }
+
+        // Removed switchContentInput function
+
+        // --- Modal Handling ---
+        function openModalForAdd() {
+            currentlyEditingIndex = null; modalTitle.textContent = "Add New Note";
+            const draftRestored = checkAndRestoreDraft();
+            if (!draftRestored) {
+                noteTitleInput.value = ''; noteDeadlineInput.value = '';
+                trixEditorElement.editor.loadHTML(""); noteActionItemsTextArea.value = '';
+            }
+            noteModal.style.display = 'flex';
+        }
+        function openModalForEdit(index) {
+            if (index < 0 || index >= notes.length) { console.error("Invalid index:", index); return; }
+            currentlyEditingIndex = index; modalTitle.textContent = "Edit Note";
+            const noteToEdit = notes[index];
+            noteTitleInput.value = noteToEdit.title; noteDeadlineInput.value = noteToEdit.deadline || '';
+            trixEditorElement.editor.loadHTML(noteToEdit.content || "");
+            noteActionItemsTextArea.value = (noteToEdit.items || []).map(item => item.text).join('\n');
+            noteModal.style.display = 'flex';
+        }
+        function closeModal() { /* ... (unchanged) ... */
+            if (noteModal.style.display === 'flex' && currentlyEditingIndex === null) { clearDraft(); } noteModal.style.display = 'none'; currentlyEditingIndex = null;
+        }
+
+        // --- Core Application Logic ---
+        // Removed toggleDeadlineField
+
+        /** Renders notes, including the virtual aggregated actions card. */
+        function renderNotes(searchTerm = '') {
+            notesGrid.innerHTML = '';
+            const lowerSearchTerm = searchTerm.toLowerCase().trim();
+
+            // --- Aggregate Action Items ---
+            let aggregatedActionItems = [];
+            notes.forEach((note, noteIndex) => {
+                if (Array.isArray(note.items)) { // Check ANY note for items
+                    note.items.forEach((item, itemIndex) => {
+                        aggregatedActionItems.push({
+                            ...item, originalNoteIndex: noteIndex, originalItemIndex: itemIndex,
+                            noteTitle: note.title || '(Untitled Note)'
+                        });
+                    });
+                }
+            });
+             aggregatedActionItems.sort((a, b) => { /* ... sort logic ... */
+                 if (a.done && !b.done) return 1; if (!a.done && b.done) return -1;
+                 const dateA = notes[a.originalNoteIndex]?.createdAt ? new Date(notes[a.originalNoteIndex].createdAt).getTime() : 0;
+                 const dateB = notes[b.originalNoteIndex]?.createdAt ? new Date(notes[b.originalNoteIndex].createdAt).getTime() : 0;
+                 return dateB - dateA;
+             });
+            // --- Create Virtual Card ---
+            if (aggregatedActionItems.length > 0) {
+                const virtualCard = document.createElement('div'); virtualCard.classList.add('note-card', 'pinned'); virtualCard.id = 'virtualActionItemsCard';
+                const titleEl = document.createElement('h3'); titleEl.textContent = 'All Action Items'; virtualCard.appendChild(titleEl);
+                const contentArea = document.createElement('div'); contentArea.classList.add('content-area');
+                const list = document.createElement('ul'); list.classList.add('interactive-list', 'aggregated-todo-list');
+                aggregatedActionItems.forEach(aggItem => {
+                    const li = document.createElement('li'); li.classList.add('interactive-list-item'); if (aggItem.done) { li.classList.add('done'); }
+                    const checkbox = document.createElement('input'); checkbox.type = 'checkbox'; checkbox.checked = aggItem.done; checkbox.classList.add('list-item-checkbox');
+                    checkbox.dataset.noteIndex = aggItem.originalNoteIndex; // Use original note index
+                    checkbox.dataset.itemIndex = aggItem.originalItemIndex; // Use original item index
+                    checkbox.dataset.arrayKey = 'items'; // Always 'items' now
+                    checkbox.addEventListener('change', handleCheckboxChange);
+                    const textSpan = document.createElement('span'); textSpan.classList.add('list-item-text'); textSpan.textContent = aggItem.text;
+                    const contextSpan = document.createElement('span'); contextSpan.classList.add('list-item-context'); contextSpan.textContent = `(${aggItem.noteTitle})`; contextSpan.title = aggItem.noteTitle;
+                    li.appendChild(checkbox); li.appendChild(textSpan); li.appendChild(contextSpan); list.appendChild(li);
+                }); contentArea.appendChild(list); virtualCard.appendChild(contentArea);
+                notesGrid.appendChild(virtualCard); // Prepend virtual card
+            }
+
+            // --- Render Regular Notes ---
+            let notesToDisplay = notes.filter(note => { /* ... filter logic ... */
+                const titleMatch = (note.title?.toLowerCase() || '').includes(lowerSearchTerm); const contentMatch = (note.content?.toLowerCase() || '').includes(lowerSearchTerm); const itemsMatch = (note.items || []).some(item => item.text?.toLowerCase().includes(lowerSearchTerm)); return titleMatch || contentMatch || itemsMatch;
+            });
+            notesToDisplay.sort((a, b) => { /* ... sort logic ... */
+                if (a.pinned && !b.pinned) return -1; if (!a.pinned && b.pinned) return 1; const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0; const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0; return dateB - dateA;
+            });
+
+            if (notesToDisplay.length === 0 && aggregatedActionItems.length === 0) { /* ... (empty message) ... */
+                 notesGrid.innerHTML = lowerSearchTerm ? '<p>No notes match search.</p>' : '<p>No notes yet.</p>'; return;
+            } else {
+                 notesToDisplay.forEach(note => {
+                    const originalIndex = notes.findIndex(n => n === note); if (originalIndex === -1) return;
+                    const card = document.createElement('div'); card.classList.add('note-card'); if (note.pinned) { card.classList.add('pinned'); } card.dataset.index = originalIndex;
+                    const titleEl = document.createElement('h3'); titleEl.textContent = note.title || '(No Title)'; card.appendChild(titleEl);
+                    const contentArea = document.createElement('div'); contentArea.classList.add('content-area'); let contentRendered = false;
+                    if (note.content) { const richContentDiv = document.createElement('div'); richContentDiv.innerHTML = note.content; contentArea.appendChild(richContentDiv); contentRendered = true; }
+                    if (Array.isArray(note.items) && note.items.length > 0) { if (contentRendered) { const todoHeader = document.createElement('h4'); todoHeader.textContent = "Action Items:"; todoHeader.classList.add('action-items-header'); contentArea.appendChild(todoHeader); } contentArea.appendChild(createInteractiveList(note.items, originalIndex, 'items')); contentRendered = true; }
+                    if (contentRendered) { card.appendChild(contentArea); }
+                    let metaContentExists = false; const metaEl = document.createElement('div'); metaEl.classList.add('meta');
+                    if (note.createdAt) { try { const createdAtSpan = document.createElement('span'); createdAtSpan.textContent = `Created: ${new Date(note.createdAt).toLocaleDateString()}`; metaEl.appendChild(createdAtSpan); metaContentExists = true; } catch (e) { console.warn("Could not parse creation date:", note.createdAt); } }
+                    if (note.deadline) { try { const deadlineSpan = document.createElement('span'); deadlineSpan.textContent = `Deadline: ${new Date(note.deadline + 'T00:00:00').toLocaleDateString()}`; metaEl.appendChild(deadlineSpan); metaContentExists = true; } catch (e) { console.warn("Could not parse deadline:", note.deadline); } }
+                    if (metaContentExists) { card.appendChild(metaEl); }
+                    const actionsContainer = document.createElement('div'); actionsContainer.classList.add('card-actions'); const hasContent = contentArea.hasChildNodes(); if (!metaContentExists && !hasContent) { actionsContainer.style.borderTop = '1px solid #f0f0f0'; } else if (!metaContentExists && hasContent) { actionsContainer.style.borderTop = '1px solid #f0f0f0'; } else { actionsContainer.style.borderTopColor = 'transparent'; actionsContainer.style.paddingTop = '0'; actionsContainer.style.marginTop = '5px';}
+                    const pinBtn = document.createElement('button'); pinBtn.classList.add('pin-btn'); /* ... pin button ... */ pinBtn.title = note.pinned ? "Unpin Note" : "Pin Note"; pinBtn.innerHTML = note.pinned ? `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pin-fill" viewBox="0 0 16 16"><path d="M4.146.146A.5.5 0 0 1 4.5 0h7a.5.5 0 0 1 .5.5c0 .68-.342 1.174-.646 1.479-.126.125-.25.224-.354.298v4.431l.078.048c.203.127.476.314.751.555C12.36 7.775 13 8.527 13 9.5a.5.5 0 0 1-.5.5h-4v4.5c0 .276-.224.5-.5.5s-.5-.224-.5-.5V10h-4a.5.5 0 0 1-.5-.5c0-.973.64-1.725 1.17-2.189A5.921 5.921 0 0 1 5 6.708V2.277a2.77 2.77 0 0 1-.354-.298C4.342 1.674 4 1.179 4 .5a.5.5 0 0 1 .146-.354z"/></svg>` : `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pin" viewBox="0 0 16 16"><path d="M4.146.146A.5.5 0 0 1 4.5 0h7a.5.5 0 0 1 .5.5c0 .68-.342 1.174-.646 1.479-.126.125-.25.224-.354.298v4.431l.078.048c.203.127.476.314.751.555C12.36 7.775 13 8.527 13 9.5a.5.5 0 0 1-.5.5h-4v4.5c0 .276-.224.5-.5.5s-.5-.224-.5-.5V10h-4a.5.5 0 0 1-.5-.5c0-.973.64-1.725 1.17-2.189A5.92 5.92 0 0 1 5 6.708V2.277a2.77 2.77 0 0 1-.354-.298C4.342 1.674 4 1.179 4 .5a.5.5 0 0 1 .146-.354zm1.58 1.408-.002-.001.002.001zm-.002-.001.002.001A.5.5 0 0 1 6 2v5a.5.5 0 0 1-.276.447l-.078.048a.5.5 0 0 1-.544.037L5 7.5l-.002-.001A.5.5 0 0 1 5 7V2a.5.5 0 0 1 .024-.158.5.5 0 0 1 .1-.1.5.5 0 0 1 .196-.12l.004-.002h-.001zm4.34 0 .001-.001-.001.001zm.001-.001-.001.001a.5.5 0 0 1-.196.12l-.004.002a.5.5 0 0 1-.1.1.5.5 0 0 1-.024.158v5a.5.5 0 0 1-.5.5l-.002.001a.5.5 0 0 1-.544-.037l-.078-.048A.5.5 0 0 1 10 7V2a.5.5 0 0 1 .146-.354l.004-.004Z"/></svg>`; if(note.pinned) pinBtn.classList.add('active'); pinBtn.onclick = (e) => { e.stopPropagation(); togglePinNote(originalIndex); }; actionsContainer.appendChild(pinBtn);
+                    const editBtn = document.createElement('button'); editBtn.classList.add('edit-btn'); /* ... edit button ... */ editBtn.title = "Edit Note"; editBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>`; editBtn.onclick = (e) => { e.stopPropagation(); openModalForEdit(originalIndex); }; actionsContainer.appendChild(editBtn);
+                    const deleteBtn = document.createElement('button'); deleteBtn.classList.add('delete-btn'); /* ... delete button ... */ deleteBtn.title = "Delete Note"; deleteBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>`; deleteBtn.onclick = (e) => { e.stopPropagation(); deleteNote(originalIndex); }; actionsContainer.appendChild(deleteBtn);
+                    card.appendChild(actionsContainer);
+
+                    notesGrid.appendChild(card);
+                });
+            }
+        }
+
+        /** Helper function to create an interactive list UL element. */
+        function createInteractiveList(itemsArray, noteIndex, itemArrayKey) { /* ... (unchanged) ... */
+            const list = document.createElement('ul'); list.classList.add('interactive-list'); if (itemArrayKey === 'meetingTodos') { list.classList.add('meeting-todo-list'); } // Keep class for potential styling
+            itemsArray.forEach((item, itemIndex) => {
+                const li = document.createElement('li'); li.classList.add('interactive-list-item'); if (item.done) { li.classList.add('done'); }
+                const checkbox = document.createElement('input'); checkbox.type = 'checkbox'; checkbox.checked = item.done; checkbox.classList.add('list-item-checkbox'); checkbox.dataset.itemIndex = itemIndex; checkbox.dataset.noteIndex = noteIndex; checkbox.dataset.arrayKey = itemArrayKey; checkbox.addEventListener('change', handleCheckboxChange);
+                const textSpan = document.createElement('span'); textSpan.classList.add('list-item-text'); textSpan.textContent = item.text;
+                li.appendChild(checkbox); li.appendChild(textSpan); list.appendChild(li);
+            }); return list;
+        }
+
+        /** Handles checkbox changes for the 'items' array. */
+        function handleCheckboxChange(e) { /* ... (unchanged) ... */
+             const checkbox = e.target; const noteIndex = parseInt(checkbox.dataset.noteIndex); const itemIndex = parseInt(checkbox.dataset.itemIndex); const arrayKey = checkbox.dataset.arrayKey;
+             if (!isNaN(noteIndex) && !isNaN(itemIndex) && arrayKey && notes[noteIndex]?.[arrayKey]?.[itemIndex]) { notes[noteIndex][arrayKey][itemIndex].done = checkbox.checked; saveNotesToLocalStorage(); renderNotes(searchInput.value); }
+             else { console.error("Could not find note or item to update checkbox state", { noteIndex, itemIndex, arrayKey }); }
+        }
+
+        function togglePinNote(index) { /* ... (unchanged) ... */
+             if (index < 0 || index >= notes.length) return; notes[index].pinned = !notes[index].pinned; saveNotesToLocalStorage(); renderNotes(searchInput.value);
+        }
+
+        function handleSaveNote() { /* ... (unchanged) ... */
+            clearMessages(); const title = noteTitleInput.value.trim(); const deadline = noteDeadlineInput.value; const richContent = noteContentHiddenInput.value.trim(); const actionItemsText = noteActionItemsTextArea.value.trim(); const actionItemLines = actionItemsText.split('\n').filter(line => line.trim() !== '');
+            if (!title && richContent.length < 10 && actionItemLines.length === 0) { showMessage('Cannot save empty note.', true); return; }
+            const preserveDoneState = (newLines, oldItems) => { return newLines.map(lineText => { const existingItem = (oldItems || []).find(oldItem => oldItem.text === lineText); return { text: lineText, done: existingItem ? existingItem.done : false }; }); };
+            let oldItems = (currentlyEditingIndex !== null) ? notes[currentlyEditingIndex]?.items : []; const newItems = preserveDoneState(actionItemLines, oldItems);
+            const noteData = { title: title, content: richContent || null, items: newItems.length > 0 ? newItems : null, deadline: deadline || null }; let message = '';
+            if (currentlyEditingIndex !== null) { const updatedNote = { ...notes[currentlyEditingIndex], ...noteData }; notes[currentlyEditingIndex] = updatedNote; message = 'Note updated!'; }
+            else { const newNote = { ...noteData, createdAt: new Date().toISOString(), pinned: false }; notes.unshift(newNote); message = 'Note added!'; clearDraft(); }
+            currentlyEditingIndex = null; saveNotesToLocalStorage(); renderNotes(searchInput.value); closeModal(); showMessage(message, false);
+        }
+
+        function deleteNote(index) { /* ... (unchanged) ... */
+             const noteTitle = notes[index]?.title || 'Untitled'; if (confirm(`Delete note "${noteTitle}"?`)) { notes.splice(index, 1); saveNotesToLocalStorage(); renderNotes(searchInput.value); showMessage('Note deleted.', false); }
+        }
+
+        // --- XML Export/Import Functions ---
+        function notesToXML() { /* ... (unchanged) ... */
+            let xmlString = '<?xml version="1.0" encoding="UTF-8"?>\n<notes>\n'; const notesToExport = [...notes].sort((a, b) => { if (a.pinned && !b.pinned) return -1; if (!a.pinned && b.pinned) return 1; const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0; const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0; return dateB - dateA; });
+            notesToExport.forEach(note => { xmlString += `  <note>\n`; xmlString += `    <title>${escapeXML(note.title)}</title>\n`; if (note.content) { xmlString += `    <content>${escapeXML(note.content)}</content>\n`; } if (Array.isArray(note.items) && note.items.length > 0) { xmlString += `    <items>\n`; note.items.forEach(item => { xmlString += `      <item done="${item.done || false}">${escapeXML(item.text)}</item>\n`; }); xmlString += `    </items>\n`; } if (note.createdAt) { xmlString += `    <createdAt>${escapeXML(note.createdAt)}</createdAt>\n`; } xmlString += `    <pinned>${note.pinned || false}</pinned>\n`; if (note.deadline) { xmlString += `    <deadline>${escapeXML(note.deadline)}</deadline>\n`; } xmlString += `  </note>\n`; }); xmlString += '</notes>'; return xmlString;
+        }
+        function exportNotesToXml() { /* ... (unchanged) ... */
+            clearMessages(); if (notes.length === 0) { showMessage('No notes to export.', true); return; } try { const xmlData = notesToXML(); const blob = new Blob([xmlData], { type: 'application/xml;charset=utf-8' }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = 'notes_backup.xml'; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url); showMessage('Notes exported!', false); } catch (error) { console.error("Export Error:", error); showMessage("Failed to export.", true); } headerMenu.classList.remove('visible');
+        }
+        function importNotesFromXml(event) { /* ... (unchanged) ... */
+             clearMessages(); headerMenu.classList.remove('visible'); const file = event.target.files[0]; if (!file) { showMessage('No file selected.', true); return; } if (!file.name.toLowerCase().endsWith('.xml') && !file.type.includes('xml')) { showMessage('Invalid file type.', true); event.target.value = null; return; } if (!confirm("Importing will replace current notes. Continue?")) { event.target.value = null; return; } const reader = new FileReader();
+            reader.onload = (e) => {
+                const xmlString = e.target.result; try { const parser = new DOMParser(); const xmlDoc = parser.parseFromString(xmlString, "application/xml"); const parserError = xmlDoc.querySelector('parsererror'); if (parserError) { throw new Error(`XML Parse Error: ${parserError.textContent.split('\n')[0]}`); } if (!xmlDoc.documentElement || xmlDoc.documentElement.nodeName !== 'notes') { throw new Error('Invalid XML: Missing <notes> root.'); } const loadedNotes = []; const noteNodes = xmlDoc.querySelectorAll('notes > note');
+                    noteNodes.forEach(node => { const titleNode = node.querySelector('title'); if (!titleNode) { console.warn("Skipping invalid note (missing title):", node); return; } const contentNode = node.querySelector('content'); const itemsNode = node.querySelector('items'); const meetingTodosNode = node.querySelector('meetingTodos'); const deadlineNode = node.querySelector('deadline'); const createdAtNode = node.querySelector('createdAt'); const pinnedNode = node.querySelector('pinned'); const note = { title: titleNode.textContent || '', pinned: pinnedNode ? pinnedNode.textContent === 'true' : false, createdAt: createdAtNode ? createdAtNode.textContent : null, deadline: deadlineNode ? deadlineNode.textContent : null, content: contentNode ? contentNode.textContent || '' : null, items: null }; let itemsData = null; if (itemsNode) { itemsData = []; itemsNode.querySelectorAll('item').forEach(itemNode => { itemsData.push({ text: itemNode.textContent || '', done: itemNode.getAttribute('done') === 'true' }); }); } else if (meetingTodosNode) { itemsData = []; meetingTodosNode.querySelectorAll('item').forEach(itemNode => { itemsData.push({ text: itemNode.textContent || '', done: itemNode.getAttribute('done') === 'true' }); }); } note.items = itemsData && itemsData.length > 0 ? itemsData : null; loadedNotes.push(note); }); notes = loadedNotes; saveNotesToLocalStorage(); renderNotes(); showMessage(`Imported ${notes.length} notes!`, false); } catch (error) { console.error("Import Error:", error); showMessage(`Import failed. ${error.message}`, true); } finally { event.target.value = null; } };
+            reader.onerror = (e) => { console.error("FileReader error:", e); showMessage(`Error reading file: ${reader.error}`, true); event.target.value = null; }; reader.readAsText(file);
+        }
+
+        // --- Event Listeners ---
+        addNoteFab.addEventListener('click', openModalForAdd);
+        closeModalBtn.addEventListener('click', closeModal);
+        modalCancelBtn.addEventListener('click', closeModal);
+        modalSaveBtn.addEventListener('click', handleSaveNote);
+        // Removed type selector listener
+        noteTitleInput.addEventListener('input', saveDraft); noteDeadlineInput.addEventListener('change', saveDraft); noteActionItemsTextArea.addEventListener('input', saveDraft); trixEditorElement.addEventListener('trix-change', saveDraft);
+        window.addEventListener('click', (event) => { if (!headerMenu.contains(event.target) && event.target !== menuToggleBtn && !menuToggleBtn.contains(event.target)) { headerMenu.classList.remove('visible'); } });
+        searchInput.addEventListener('input', (e) => { renderNotes(e.target.value); });
+        menuToggleBtn.addEventListener('click', () => { headerMenu.classList.toggle('visible'); });
+        exportXmlBtn.addEventListener('click', exportNotesToXml);
+        importXmlBtn.addEventListener('click', () => { importXmlInput.click(); });
+        importXmlInput.addEventListener('change', importNotesFromXml);
+
+        // --- Initial Load ---
+        document.addEventListener('trix-initialize', () => { console.log("Trix Initialized"); });
+        notes = loadNotesFromLocalStorage(); // Load and migrate if necessary
+        renderNotes();
+
+    </script>
+
+</body>
+</html>
