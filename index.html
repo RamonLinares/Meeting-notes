@@ -20,28 +20,373 @@
 
         /* Header Styles */
         .main-header {
-            position: fixed; top: 0; left: 0; right: 0; z-index: 1010; display: flex;
-            align-items: center; padding: 10px 20px; background-color: #ffffff;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1); gap: 15px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1010;
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            background-color: #ffffff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            gap: 20px;
+            min-height: 70px;
         }
-        .main-header h1 { font-size: 1.8rem; font-weight: 700; color: #000; margin-right: auto; }
-        .search-container { display: flex; align-items: center; background-color: #f0f2f5; border-radius: 20px; padding: 5px 10px; }
-        .search-container svg { width: 18px; height: 18px; stroke: #666; margin-right: 5px; }
-        #searchInput { border: none; background: none; outline: none; font-size: 0.95rem; padding: 5px; width: 180px; }
-        .menu-container { position: relative; }
-        #menuToggleBtn { background: none; border: none; cursor: pointer; padding: 8px; border-radius: 50%; }
-        #menuToggleBtn:hover { background-color: #f0f2f5; }
-        #menuToggleBtn svg { width: 24px; height: 24px; stroke: #555; }
-        .header-menu {
-            display: none; position: absolute; top: 100%; right: 0; background-color: white;
-            border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); border: 1px solid #e0e0e0;
-            min-width: 180px; z-index: 1011; overflow: hidden;
+        .main-header h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #000;
+            margin-right: auto;
+            margin-bottom: 0;
         }
-        .header-menu.visible { display: block; }
-        .header-menu button { display: block; width: 100%; padding: 12px 18px; border: none; background: none; text-align: left; font-size: 0.95rem; cursor: pointer; color: #333; }
-        .header-menu button:hover { background-color: #f0f2f5; }
-        .header-menu button svg { width: 16px; height: 16px; margin-right: 8px; vertical-align: middle; stroke: #555; }
-        #importXmlInput { display: none; }
+        .search-container {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 0;
+            flex-wrap: wrap;
+            background: transparent;
+            align-items: center;
+            flex: 1;
+            justify-content: center;
+        }
+        .search-input-container {
+            flex: 1;
+            min-width: 200px;
+            position: relative;
+            max-width: 500px;
+        }
+        #searchInput {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #e0e4e8;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            background-color: #f8f9fa;
+            transition: all 0.2s ease;
+            color: #2d3436;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+        #searchInput:focus {
+            outline: none;
+            border-color: #007bff;
+            background-color: #ffffff;
+            box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
+        }
+        #searchInput::placeholder {
+            color: #a0a0a0;
+        }
+
+        /* Search Suggestions and History */
+        .search-suggestions,
+        .search-history {
+            position: absolute;
+            top: calc(100% + 8px);
+            left: 0;
+            right: 0;
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            z-index: 1000;
+            max-height: 300px;
+            overflow-y: auto;
+            display: none;
+            border: 1px solid #e0e4e8;
+        }
+        .search-suggestions.active,
+        .search-history.active {
+            display: block;
+        }
+        .suggestion-item,
+        .history-item {
+            padding: 10px 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: #2d3436;
+        }
+        .suggestion-item:hover,
+        .history-item:hover {
+            background-color: #f8f9fa;
+        }
+        .suggestion-item.highlighted {
+            background-color: #f0f7ff;
+            color: #007bff;
+        }
+        .history-item .time {
+            font-size: 0.8em;
+            color: #a0a0a0;
+        }
+
+        /* Filter Groups */
+        .search-filters {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #f8f9fa;
+            padding: 8px 12px;
+            border-radius: 8px;
+            border: 1px solid #e0e4e8;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+        .custom-date-inputs {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: #ffffff;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #e0e4e8;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            z-index: 1000;
+            margin-top: 8px;
+            min-width: 250px;
+        }
+        .custom-date-inputs.visible {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .custom-date-inputs label {
+            font-size: 0.85em;
+            color: #666;
+        }
+        .custom-date-inputs input[type="date"] {
+            padding: 6px 8px;
+            border: 1px solid #e0e4e8;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        .custom-date-inputs button {
+            padding: 6px 12px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 4px;
+            font-size: 0.9em;
+        }
+        .custom-date-inputs button:hover {
+            background: #0056b3;
+        }
+        body.dark-mode .custom-date-inputs {
+            background: #2d2d2d;
+            border-color: #404040;
+        }
+        body.dark-mode .custom-date-inputs label {
+            color: #a0a0a0;
+        }
+        body.dark-mode .custom-date-inputs input[type="date"] {
+            background: #363636;
+            border-color: #404040;
+            color: #e0e0e0;
+        }
+        .filter-group:hover {
+            border-color: #007bff;
+            background: #ffffff;
+        }
+        .filter-group label {
+            font-size: 0.9em;
+            color: #636e72;
+            font-weight: 500;
+        }
+        .filter-group select {
+            border: none;
+            background: transparent;
+            color: #2d3436;
+            font-size: 0.9em;
+            cursor: pointer;
+            padding-right: 24px;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23636e72' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 4px center;
+        }
+        .filter-group select:focus {
+            outline: none;
+        }
+
+        /* Clear Filters Button */
+        .clear-filters {
+            background: #f8f9fa;
+            border: 1px solid #e0e4e8;
+            color: #636e72;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9em;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        .clear-filters:hover {
+            background: #ffffff;
+            border-color: #dc3545;
+            color: #dc3545;
+        }
+        .clear-filters svg {
+            width: 16px;
+            height: 16px;
+            transition: all 0.2s ease;
+        }
+        .clear-filters:hover svg {
+            transform: rotate(90deg);
+        }
+
+        /* Tag Filter Container */
+        .tag-filter-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 16px 0;
+            padding: 16px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            border: 1px solid #e0e4e8;
+            transition: all 0.2s ease;
+        }
+        .tag-filter-container:hover {
+            background-color: #f8f9fa;
+            border-color: #007bff;
+        }
+        .tag-filter-container .tag {
+            background-color: #f0f2f5;
+            color: #2d3436;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.9em;
+            border: 1px solid #e0e4e8;
+            transition: all 0.2s ease;
+            font-weight: 500;
+        }
+        .tag-filter-container .tag:hover {
+            background-color: #e2e8f0;
+            border-color: #007bff;
+            color: #007bff;
+            transform: translateY(-1px);
+        }
+        .tag-filter-container .tag.selected {
+            background-color: #007bff;
+            color: #ffffff;
+            border-color: #007bff;
+        }
+
+        /* Dark mode overrides for tag filters */
+        body.dark-mode .tag-filter-container {
+            background-color: #2d2d2d;
+        }
+        body.dark-mode .tag-filter-container:hover {
+            background-color: #363636;
+            border-color: #0d6efd;
+        }
+        body.dark-mode .tag-filter-container .tag {
+            background-color: #363636;
+            border-color: #404040;
+            color: #e0e0e0;
+        }
+        body.dark-mode .tag-filter-container .tag:hover {
+            background-color: #0d47a1;
+            border-color: #0d6efd;
+            color: #ffffff;
+        }
+        body.dark-mode .tag-filter-container .tag.selected {
+            background-color: #0d6efd;
+            color: #ffffff;
+            border-color: #0d6efd;
+        }
+
+        /* Dark Mode Styles */
+        body.dark-mode #searchInput {
+            background-color: #2d2d2d;
+            border-color: #404040;
+            color: #e0e0e0;
+        }
+        body.dark-mode #searchInput:focus {
+            border-color: #0d6efd;
+            background-color: #363636;
+            box-shadow: 0 0 0 3px rgba(13,110,253,0.2);
+        }
+        body.dark-mode #searchInput::placeholder {
+            color: #808080;
+        }
+        body.dark-mode .search-suggestions,
+        body.dark-mode .search-history {
+            background: #2d2d2d;
+            border-color: #404040;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        body.dark-mode .suggestion-item,
+        body.dark-mode .history-item {
+            color: #e0e0e0;
+        }
+        body.dark-mode .suggestion-item:hover,
+        body.dark-mode .history-item:hover {
+            background-color: #363636;
+        }
+        body.dark-mode .suggestion-item.highlighted {
+            background-color: #0d47a1;
+            color: #ffffff;
+        }
+        body.dark-mode .filter-group {
+            background: #2d2d2d;
+            border-color: #404040;
+        }
+        body.dark-mode .filter-group:hover {
+            border-color: #0d6efd;
+            background: #363636;
+        }
+        body.dark-mode .filter-group label {
+            color: #a0a0a0;
+        }
+        body.dark-mode .filter-group select {
+            color: #e0e0e0;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23a0a0a0' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+        }
+        body.dark-mode .clear-filters {
+            background: #2d2d2d;
+            border-color: #404040;
+            color: #a0a0a0;
+        }
+        body.dark-mode .clear-filters:hover {
+            background: #363636;
+            border-color: #dc3545;
+            color: #dc3545;
+        }
+        body.dark-mode .tag-filter-container {
+            background-color: #2d2d2d;
+        }
+        body.dark-mode .tag-filter-container:hover {
+            background-color: #363636;
+            border-color: #0d6efd;
+        }
+        body.dark-mode .tag-filter-container .tag {
+            background-color: #363636;
+            border-color: #404040;
+            color: #e0e0e0;
+        }
+        body.dark-mode .tag-filter-container .tag:hover {
+            background-color: #0d47a1;
+            border-color: #0d6efd;
+            color: #ffffff;
+        }
+        body.dark-mode .tag-filter-container .tag.selected {
+            background-color: #0d6efd;
+            color: #ffffff;
+            border-color: #0d6efd;
+        }
 
         /* Notes Grid */
         #notesGrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
@@ -382,8 +727,18 @@
             background-color: #2d2d2d;
         }
         .tag-filter-container .tag {
-            background-color: #3d3d3d;
-            color: #a0a0a0;
+            background-color: #f0f2f5;
+            color: #2d3436;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.9em;
+            border: 1px solid #e0e4e8;
+            transition: all 0.2s ease;
+        }
+        body.dark-mode .tag-filter-container .tag {
+            background-color: #363636;
+            color: #e0e0e0;
+            border-color: #404040;
         }
         body.dark-mode .tag-filter-container .tag.selected {
             background-color: #0056b3;
@@ -396,14 +751,138 @@
             color: #e0e0e0;
         }
 
+        /* Header Menu Styles */
+        .menu-container {
+            position: relative;
+        }
+        #importXmlInput {
+            display: none;  /* Hide the file input */
+        }
+        .header-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+            min-width: 200px;
+            padding: 8px 0;
+            margin-top: 8px;
+        }
+        .header-menu.visible {
+            display: block;
+        }
+        .header-menu button {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+            padding: 8px 16px;
+            border: none;
+            background: none;
+            color: #333;
+            cursor: pointer;
+            font-size: 0.9rem;
+            text-align: left;
+            transition: background-color 0.2s;
+        }
+        .header-menu button:hover {
+            background-color: #f5f5f5;
+        }
+        .header-menu button svg {
+            width: 16px;
+            height: 16px;
+        }
+        #menuToggleBtn {
+            background: none;
+            border: none;
+            padding: 8px;
+            cursor: pointer;
+            color: #333;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.2s;
+        }
+        #menuToggleBtn:hover {
+            background-color: rgba(0,0,0,0.05);
+        }
+        #menuToggleBtn svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Dark mode styles for header menu */
+        body.dark-mode .header-menu {
+            background: #2d2d2d;
+            border-color: #404040;
+        }
+        body.dark-mode .header-menu button {
+            color: #e0e0e0;
+        }
+        body.dark-mode .header-menu button:hover {
+            background-color: #3d3d3d;
+        }
+        body.dark-mode #menuToggleBtn {
+            color: #e0e0e0;
+        }
+        body.dark-mode #menuToggleBtn:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
+
     </style>
 </head>
 <body>
     <header class="main-header">
         <h1>Notes</h1>
         <div class="search-container">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-            <input type="search" id="searchInput" placeholder="Search notes...">
+            <div class="search-input-container">
+                <input type="text" id="searchInput" placeholder="Search notes...">
+                <div class="search-suggestions"></div>
+                <div class="search-history"></div>
+            </div>
+            <div class="search-filters">
+                <div class="filter-group">
+                    <label for="dateFilter">Date:</label>
+                    <select id="dateFilter">
+                        <option value="">All Time</option>
+                        <option value="today">Today</option>
+                        <option value="week">This Week</option>
+                        <option value="month">This Month</option>
+                        <option value="custom">Custom Range</option>
+                    </select>
+                    <div id="customDateInputs" class="custom-date-inputs">
+                        <div>
+                            <label for="startDate">Start Date:</label>
+                            <input type="date" id="startDate">
+                        </div>
+                        <div>
+                            <label for="endDate">End Date:</label>
+                            <input type="date" id="endDate">
+                        </div>
+                        <button id="applyCustomDate">Apply</button>
+                    </div>
+                </div>
+                <div class="filter-group">
+                    <label for="statusFilter">Status:</label>
+                    <select id="statusFilter">
+                        <option value="">All</option>
+                        <option value="completed">Completed</option>
+                        <option value="pending">Pending</option>
+                    </select>
+                </div>
+                <button class="clear-filters" id="clearFilters">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                        <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                    </svg>
+                    Clear Filters
+                </button>
+            </div>
         </div>
         <div class="menu-container">
             <button id="menuToggleBtn" title="Menu">
@@ -649,7 +1128,7 @@
             notesGrid.innerHTML = '';
             const lowerSearchTerm = searchTerm.toLowerCase().trim();
 
-            // Filter notes based on search term and selected tags
+            // Filter notes based on search term, selected tags, date, and status
             let notesToDisplay = notes.filter(note => {
                 const titleMatch = (note.title?.toLowerCase() || '').includes(lowerSearchTerm);
                 const contentMatch = (note.content?.toLowerCase() || '').includes(lowerSearchTerm);
@@ -668,6 +1147,16 @@
                 return (titleMatch || contentMatch || itemsMatch) && tagsMatch;
             });
 
+            // Apply date filter if it exists
+            if (document.getElementById('dateFilter')) {
+                notesToDisplay = filterNotesByDate(notesToDisplay, document.getElementById('dateFilter').value);
+            }
+
+            // Apply status filter if it exists
+            if (document.getElementById('statusFilter')) {
+                notesToDisplay = filterNotesByStatus(notesToDisplay, document.getElementById('statusFilter').value);
+            }
+
             // Sort notes (pinned first, then by date)
             notesToDisplay.sort((a, b) => {
                 if (a.pinned && !b.pinned) return -1;
@@ -678,7 +1167,7 @@
             });
 
             if (notesToDisplay.length === 0) {
-                notesGrid.innerHTML = lowerSearchTerm || selectedTags.size > 0 
+                notesGrid.innerHTML = lowerSearchTerm || selectedTags.size > 0 || dateFilter.value || statusFilter.value
                     ? '<p>No notes match the current filters.</p>' 
                     : '<p>No notes yet.</p>';
                 return;
@@ -1193,6 +1682,259 @@
                 document.getElementById('addTagBtn').click();
             }
         });
+
+        // Search and filter functionality
+        const dateFilter = document.getElementById('dateFilter');
+        const statusFilter = document.getElementById('statusFilter');
+        const clearFiltersBtn = document.getElementById('clearFilters');
+        const searchSuggestions = document.querySelector('.search-suggestions');
+        const searchHistory = document.querySelector('.search-history');
+        let searchHistoryList = JSON.parse(localStorage.getItem('searchHistory') || '[]');
+        let currentSuggestionIndex = -1;
+
+        function updateSearchHistory(term) {
+            if (!term.trim()) return;
+            
+            // Remove if already exists
+            searchHistoryList = searchHistoryList.filter(item => item.term !== term);
+            
+            // Add to beginning
+            searchHistoryList.unshift({
+                term,
+                time: new Date().toISOString()
+            });
+            
+            // Keep only last 10 searches
+            searchHistoryList = searchHistoryList.slice(0, 10);
+            
+            localStorage.setItem('searchHistory', JSON.stringify(searchHistoryList));
+            renderSearchHistory();
+        }
+
+        function renderSearchHistory() {
+            searchHistory.innerHTML = '';
+            if (searchHistoryList.length === 0) return;
+            
+            const header = document.createElement('div');
+            header.className = 'history-item';
+            header.innerHTML = `
+                <span>Recent Searches</span>
+                <span class="clear-history" title="Clear History">×</span>
+            `;
+            header.querySelector('.clear-history').onclick = (e) => {
+                e.stopPropagation();
+                searchHistoryList = [];
+                localStorage.setItem('searchHistory', JSON.stringify(searchHistoryList));
+                renderSearchHistory();
+            };
+            searchHistory.appendChild(header);
+            
+            searchHistoryList.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'history-item';
+                div.innerHTML = `
+                    <span>${item.term}</span>
+                    <span class="time">${new Date(item.time).toLocaleTimeString()}</span>
+                `;
+                div.onclick = () => {
+                    searchInput.value = item.term;
+                    searchInput.focus();
+                    renderNotes(item.term);
+                    searchHistory.classList.remove('active');
+                };
+                searchHistory.appendChild(div);
+            });
+        }
+
+        function getSearchSuggestions(term) {
+            if (!term.trim()) return [];
+            
+            const suggestions = new Set();
+            
+            // Add matching tags
+            notes.forEach(note => {
+                if (note.tags) {
+                    note.tags.forEach(tag => {
+                        if (tag.toLowerCase().includes(term.toLowerCase())) {
+                            suggestions.add(`#${tag}`);
+                        }
+                    });
+                }
+            });
+            
+            // Add matching titles
+            notes.forEach(note => {
+                if (note.title && note.title.toLowerCase().includes(term.toLowerCase())) {
+                    suggestions.add(note.title);
+                }
+            });
+            
+            return Array.from(suggestions).slice(0, 5);
+        }
+
+        function renderSearchSuggestions(term) {
+            const suggestions = getSearchSuggestions(term);
+            searchSuggestions.innerHTML = '';
+            
+            if (suggestions.length === 0) {
+                searchSuggestions.classList.remove('active');
+                return;
+            }
+            
+            suggestions.forEach((suggestion, index) => {
+                const div = document.createElement('div');
+                div.className = 'suggestion-item';
+                if (index === currentSuggestionIndex) {
+                    div.classList.add('highlighted');
+                }
+                div.textContent = suggestion;
+                div.onclick = () => {
+                    searchInput.value = suggestion.startsWith('#') ? suggestion.slice(1) : suggestion;
+                    renderNotes(searchInput.value);
+                    searchSuggestions.classList.remove('active');
+                };
+                searchSuggestions.appendChild(div);
+            });
+            
+            searchSuggestions.classList.add('active');
+        }
+
+        function filterNotesByDate(notes, dateFilter) {
+            if (!dateFilter) return notes;
+            
+            const now = new Date();
+            const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            
+            return notes.filter(note => {
+                if (!note.createdAt) return false;
+                
+                const noteDate = new Date(note.createdAt);
+                const noteDay = new Date(noteDate.getFullYear(), noteDate.getMonth(), noteDate.getDate());
+                
+                switch (dateFilter) {
+                    case 'today':
+                        return noteDay.getTime() === today.getTime();
+                    case 'week':
+                        const weekStart = new Date(today);
+                        weekStart.setDate(today.getDate() - today.getDay());
+                        return noteDay >= weekStart && noteDay <= today;
+                    case 'month':
+                        return noteDate.getMonth() === now.getMonth() && 
+                               noteDate.getFullYear() === now.getFullYear();
+                    case 'custom':
+                        const startDate = document.getElementById('startDate').value;
+                        const endDate = document.getElementById('endDate').value;
+                        if (!startDate || !endDate) return true;
+                        
+                        const start = new Date(startDate);
+                        const end = new Date(endDate);
+                        end.setHours(23, 59, 59, 999); // Include the entire end date
+                        
+                        return noteDay >= start && noteDay <= end;
+                    default:
+                        return true;
+                }
+            });
+        }
+
+        function filterNotesByStatus(notes, statusFilter) {
+            if (!statusFilter) return notes;
+            
+            return notes.filter(note => {
+                if (!note.items || note.items.length === 0) return false;
+                
+                const hasPending = note.items.some(item => !item.done);
+                const allCompleted = note.items.every(item => item.done);
+                
+                return (statusFilter === 'pending' && hasPending) || 
+                       (statusFilter === 'completed' && allCompleted);
+            });
+        }
+
+        function clearFilters() {
+            searchInput.value = '';
+            dateFilter.value = '';
+            statusFilter.value = '';
+            selectedTags.clear();
+            document.getElementById('customDateInputs').classList.remove('visible');
+            document.getElementById('startDate').value = '';
+            document.getElementById('endDate').value = '';
+            updateTagFilterContainer();
+            renderNotes();
+        }
+
+        searchInput.addEventListener('input', (e) => {
+            const term = e.target.value;
+            renderSearchSuggestions(term);
+            renderNotes(term);
+        });
+
+        searchInput.addEventListener('focus', () => {
+            renderSearchHistory();
+            searchHistory.classList.add('active');
+        });
+
+        searchInput.addEventListener('blur', () => {
+            setTimeout(() => {
+                searchSuggestions.classList.remove('active');
+                searchHistory.classList.remove('active');
+            }, 200);
+        });
+
+        searchInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                updateSearchHistory(searchInput.value);
+                searchSuggestions.classList.remove('active');
+                searchHistory.classList.remove('active');
+            } else if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                const suggestions = searchSuggestions.querySelectorAll('.suggestion-item');
+                if (suggestions.length > 0) {
+                    currentSuggestionIndex = (currentSuggestionIndex + 1) % suggestions.length;
+                    suggestions.forEach((s, i) => {
+                        s.classList.toggle('highlighted', i === currentSuggestionIndex);
+                    });
+                }
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                const suggestions = searchSuggestions.querySelectorAll('.suggestion-item');
+                if (suggestions.length > 0) {
+                    currentSuggestionIndex = (currentSuggestionIndex - 1 + suggestions.length) % suggestions.length;
+                    suggestions.forEach((s, i) => {
+                        s.classList.toggle('highlighted', i === currentSuggestionIndex);
+                    });
+                }
+            }
+        });
+
+        dateFilter.addEventListener('change', (e) => {
+            const customDateInputs = document.getElementById('customDateInputs');
+            if (e.target.value === 'custom') {
+                customDateInputs.classList.add('visible');
+            } else {
+                customDateInputs.classList.remove('visible');
+                renderNotes(searchInput.value);
+            }
+        });
+
+        document.getElementById('applyCustomDate').addEventListener('click', () => {
+            renderNotes(searchInput.value);
+        });
+
+        // Close custom date inputs when clicking outside
+        document.addEventListener('click', (e) => {
+            const customDateInputs = document.getElementById('customDateInputs');
+            const dateFilterGroup = document.querySelector('.filter-group');
+            if (!dateFilterGroup.contains(e.target) && dateFilter.value !== 'custom') {
+                customDateInputs.classList.remove('visible');
+            }
+        });
+
+        statusFilter.addEventListener('change', () => {
+            renderNotes(searchInput.value);
+        });
+
+        clearFiltersBtn.addEventListener('click', clearFilters);
 
     </script>
 
