@@ -197,6 +197,205 @@
         /* Utility */
         .hidden { display: none; }
 
+        /* Dark Mode Styles */
+        body.dark-mode {
+            background-color: #1a1a1a;
+            color: #e0e0e0;
+        }
+        body.dark-mode .main-header {
+            background-color: #2d2d2d;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        body.dark-mode .main-header h1 {
+            color: #ffffff;
+        }
+        body.dark-mode .search-container {
+            background-color: #3d3d3d;
+        }
+        body.dark-mode .search-container svg {
+            stroke: #a0a0a0;
+        }
+        body.dark-mode #searchInput {
+            color: #e0e0e0;
+        }
+        body.dark-mode .note-card {
+            background-color: #2d2d2d;
+            border-color: #3d3d3d;
+            color: #e0e0e0;
+        }
+        body.dark-mode .note-card h3 {
+            color: #ffffff;
+        }
+        body.dark-mode .note-card .content-area {
+            color: #c0c0c0;
+        }
+        body.dark-mode .note-card .meta {
+            color: #a0a0a0;
+            border-top-color: #3d3d3d;
+        }
+        body.dark-mode .card-actions button {
+            background-color: #3d3d3d;
+            color: #c0c0c0;
+            border-color: #4d4d4d;
+        }
+        body.dark-mode .card-actions button:hover {
+            background-color: #4d4d4d;
+            color: #ffffff;
+        }
+        body.dark-mode .modal-content {
+            background-color: #2d2d2d;
+            border-color: #3d3d3d;
+            color: #e0e0e0;
+        }
+        body.dark-mode .modal-content input,
+        body.dark-mode .modal-content textarea,
+        body.dark-mode .modal-content select {
+            background-color: #3d3d3d;
+            border-color: #4d4d4d;
+            color: #e0e0e0;
+        }
+        body.dark-mode .modal-content label {
+            color: #c0c0c0;
+        }
+        body.dark-mode trix-editor {
+            background-color: #3d3d3d;
+            border-color: #4d4d4d;
+            color: #e0e0e0;
+        }
+        body.dark-mode .header-menu {
+            background-color: #2d2d2d;
+            border-color: #3d3d3d;
+        }
+        body.dark-mode .header-menu button {
+            color: #e0e0e0;
+        }
+        body.dark-mode .header-menu button:hover {
+            background-color: #3d3d3d;
+        }
+        body.dark-mode .note-card.pinned {
+            background-color: #3d3d3d;
+        }
+        body.dark-mode .action-items-header {
+            color: #a0a0a0;
+            border-top-color: #3d3d3d;
+        }
+        body.dark-mode .list-item-context {
+            color: #808080;
+        }
+        body.dark-mode .list-item-text {
+            color: #c0c0c0;
+        }
+        body.dark-mode .list-item-text.done {
+            color: #808080;
+        }
+        body.dark-mode .modal-content h2 {
+            color: #ffffff;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Tag Styles */
+        .tag-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 10px 0;
+        }
+        .tag {
+            display: inline-flex;
+            align-items: center;
+            background-color: #e2f0fe;
+            color: #0056b3;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .tag:hover {
+            background-color: #cce5ff;
+        }
+        .tag.selected {
+            background-color: #0056b3;
+            color: white;
+        }
+        .tag .remove-tag {
+            margin-left: 4px;
+            color: inherit;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+        .tag-input-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        .tag-input {
+            flex: 1;
+            padding: 6px 10px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+        .add-tag-btn {
+            padding: 6px 12px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        .add-tag-btn:hover {
+            background-color: #0056b3;
+        }
+        .tag-filter-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+        }
+        .tag-filter-container .tag {
+            background-color: #f0f2f5;
+            color: #495057;
+        }
+        .tag-filter-container .tag.selected {
+            background-color: #007bff;
+            color: white;
+        }
+        body.dark-mode .tag {
+            background-color: #2d3d4d;
+            color: #a0c8ff;
+        }
+        body.dark-mode .tag:hover {
+            background-color: #3d4d5d;
+        }
+        body.dark-mode .tag.selected {
+            background-color: #0056b3;
+            color: white;
+        }
+        body.dark-mode .tag-filter-container {
+            background-color: #2d2d2d;
+        }
+        .tag-filter-container .tag {
+            background-color: #3d3d3d;
+            color: #a0a0a0;
+        }
+        body.dark-mode .tag-filter-container .tag.selected {
+            background-color: #0056b3;
+            color: #ffffff;
+            box-shadow: 0 0 0 1px #007bff;
+        }
+        body.dark-mode .tag-input {
+            background-color: #3d3d3d;
+            border-color: #4d4d4d;
+            color: #e0e0e0;
+        }
+
     </style>
 </head>
 <body>
@@ -211,6 +410,12 @@
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg>
             </button>
             <div id="headerMenu" class="header-menu">
+                 <button id="darkModeToggle">
+                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                         <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                     </svg>
+                     Toggle Dark Mode
+                 </button>
                  <button id="exportXmlBtn">
                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 15 12 20 7 15"></polyline><line x1="12" y1="20" x2="12" y2="3"></line></svg>
                      Export to XML
@@ -250,6 +455,11 @@
                          <input id="noteContentHidden" type="hidden" name="content">
                          <trix-editor input="noteContentHidden" placeholder="Write your main notes here..."></trix-editor>
                     </div>
+                </div>
+                <div class="tag-container" id="noteTagsContainer"></div>
+                <div class="tag-input-container">
+                    <input type="text" id="tagInput" class="tag-input" placeholder="Add a tag...">
+                    <button class="add-tag-btn" id="addTagBtn">Add</button>
                 </div>
                  <div id="actionItemsArea">
                      <label for="noteActionItems">Action Items (Optional):</label>
@@ -297,10 +507,12 @@
         const importXmlInput = document.getElementById('importXmlInput');
 
         // --- Application State ---
-        let notes = []; // Note: { title, createdAt, pinned, deadline?, content?, items? }
+        let notes = []; // Note: { title, createdAt, pinned, deadline?, content?, items?, tags? }
         let currentlyEditingIndex = null;
         const LOCAL_STORAGE_KEY = 'notesAppData';
         const DRAFT_STORAGE_KEY = 'noteDraftData';
+        const DARK_MODE_KEY = 'darkModeEnabled';
+        let selectedTags = new Set();
 
         // --- Utility Functions ---
         function clearMessages() { statusDiv.textContent = ''; errorDiv.textContent = ''; }
@@ -315,10 +527,63 @@
         function saveNotesToLocalStorage() { /* ... */
              try { localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(notes)); } catch (error) { console.error("LS Save Error:", error); showMessage("Could not save notes.", true); }
         }
-        function loadNotesFromLocalStorage() { /* ... (migration logic included) ... */
-             const storedNotes = localStorage.getItem(LOCAL_STORAGE_KEY); let loadedNotes = [];
-            if (storedNotes) { try { loadedNotes = JSON.parse(storedNotes); if (!Array.isArray(loadedNotes)) { loadedNotes = []; } loadedNotes = loadedNotes.map(note => { const migratedNote = { title: note.title || '', createdAt: note.createdAt || new Date().toISOString(), pinned: note.pinned || false, deadline: note.deadline || null, content: note.content || null, items: note.items || null }; if (note.type) { if ((note.type === 'todo' || note.type === 'shopping') && Array.isArray(note.items)) { migratedNote.items = note.items; migratedNote.content = null; } else if (note.type === 'meeting') { migratedNote.content = note.content || null; if (Array.isArray(note.meetingTodos)) { migratedNote.items = note.meetingTodos; } else if (!migratedNote.items) { migratedNote.items = []; } } else { migratedNote.content = note.content || null; migratedNote.items = null; } } if (migratedNote.items !== null && !Array.isArray(migratedNote.items)) { migratedNote.items = []; } return migratedNote; }); } catch (error) { console.error("LS Parse/Migration Error:", error); loadedNotes = []; } }
-             return loadedNotes.map(note => ({ title: note.title || '', createdAt: note.createdAt || new Date().toISOString(), pinned: note.pinned || false, deadline: note.deadline || null, content: note.content || null, items: Array.isArray(note.items) ? note.items : null }));
+        function loadNotesFromLocalStorage() {
+            const storedNotes = localStorage.getItem(LOCAL_STORAGE_KEY);
+            let loadedNotes = [];
+            if (storedNotes) {
+                try {
+                    loadedNotes = JSON.parse(storedNotes);
+                    if (!Array.isArray(loadedNotes)) {
+                        loadedNotes = [];
+                    }
+                    loadedNotes = loadedNotes.map(note => {
+                        const migratedNote = {
+                            title: note.title || '',
+                            createdAt: note.createdAt || new Date().toISOString(),
+                            pinned: note.pinned || false,
+                            deadline: note.deadline || null,
+                            content: note.content || null,
+                            items: note.items || null,
+                            tags: note.tags || null
+                        };
+                        if (note.type) {
+                            if ((note.type === 'todo' || note.type === 'shopping') && Array.isArray(note.items)) {
+                                migratedNote.items = note.items;
+                                migratedNote.content = null;
+                            } else if (note.type === 'meeting') {
+                                migratedNote.content = note.content || null;
+                                if (Array.isArray(note.meetingTodos)) {
+                                    migratedNote.items = note.meetingTodos;
+                                } else if (!migratedNote.items) {
+                                    migratedNote.items = [];
+                                }
+                            } else {
+                                migratedNote.content = note.content || null;
+                                migratedNote.items = null;
+                            }
+                        }
+                        if (migratedNote.items !== null && !Array.isArray(migratedNote.items)) {
+                            migratedNote.items = [];
+                        }
+                        if (migratedNote.tags !== null && !Array.isArray(migratedNote.tags)) {
+                            migratedNote.tags = [];
+                        }
+                        return migratedNote;
+                    });
+                } catch (error) {
+                    console.error("LS Parse/Migration Error:", error);
+                    loadedNotes = [];
+                }
+            }
+            return loadedNotes.map(note => ({
+                title: note.title || '',
+                createdAt: note.createdAt || new Date().toISOString(),
+                pinned: note.pinned || false,
+                deadline: note.deadline || null,
+                content: note.content || null,
+                items: Array.isArray(note.items) ? note.items : null,
+                tags: Array.isArray(note.tags) ? note.tags : null
+            }));
         }
 
         // --- Draft Handling ---
@@ -350,6 +615,7 @@
             if (!draftRestored) {
                 noteTitleInput.value = ''; noteDeadlineInput.value = '';
                 trixEditorElement.editor.loadHTML(""); noteActionItemsTextArea.value = '';
+                document.getElementById('noteTagsContainer').innerHTML = '';
             }
             noteModal.style.display = 'flex';
         }
@@ -360,6 +626,15 @@
             noteTitleInput.value = noteToEdit.title; noteDeadlineInput.value = noteToEdit.deadline || '';
             trixEditorElement.editor.loadHTML(noteToEdit.content || "");
             noteActionItemsTextArea.value = (noteToEdit.items || []).map(item => item.text).join('\n');
+            
+            const tagsContainer = document.getElementById('noteTagsContainer');
+            tagsContainer.innerHTML = '';
+            if (noteToEdit.tags) {
+                noteToEdit.tags.forEach(tag => {
+                    tagsContainer.appendChild(createTagElement(tag));
+                });
+            }
+            
             noteModal.style.display = 'flex';
         }
         function closeModal() { /* ... (unchanged) ... */
@@ -374,76 +649,184 @@
             notesGrid.innerHTML = '';
             const lowerSearchTerm = searchTerm.toLowerCase().trim();
 
-            // --- Aggregate Action Items ---
-            let aggregatedActionItems = [];
-            notes.forEach((note, noteIndex) => {
-                if (Array.isArray(note.items)) { // Check ANY note for items
-                    note.items.forEach((item, itemIndex) => {
-                        aggregatedActionItems.push({
-                            ...item, originalNoteIndex: noteIndex, originalItemIndex: itemIndex,
-                            noteTitle: note.title || '(Untitled Note)'
-                        });
-                    });
+            // Filter notes based on search term and selected tags
+            let notesToDisplay = notes.filter(note => {
+                const titleMatch = (note.title?.toLowerCase() || '').includes(lowerSearchTerm);
+                const contentMatch = (note.content?.toLowerCase() || '').includes(lowerSearchTerm);
+                const itemsMatch = (note.items || []).some(item => item.text?.toLowerCase().includes(lowerSearchTerm));
+                
+                // Tag filtering logic
+                let tagsMatch = true;
+                if (selectedTags.size > 0) {
+                    if (!note.tags || note.tags.length === 0) {
+                        tagsMatch = false;
+                    } else {
+                        tagsMatch = note.tags.some(tag => selectedTags.has(tag));
+                    }
                 }
+                
+                return (titleMatch || contentMatch || itemsMatch) && tagsMatch;
             });
-             aggregatedActionItems.sort((a, b) => { /* ... sort logic ... */
-                 if (a.done && !b.done) return 1; if (!a.done && b.done) return -1;
-                 const dateA = notes[a.originalNoteIndex]?.createdAt ? new Date(notes[a.originalNoteIndex].createdAt).getTime() : 0;
-                 const dateB = notes[b.originalNoteIndex]?.createdAt ? new Date(notes[b.originalNoteIndex].createdAt).getTime() : 0;
-                 return dateB - dateA;
-             });
-            // --- Create Virtual Card ---
-            if (aggregatedActionItems.length > 0) {
-                const virtualCard = document.createElement('div'); virtualCard.classList.add('note-card', 'pinned'); virtualCard.id = 'virtualActionItemsCard';
-                const titleEl = document.createElement('h3'); titleEl.textContent = 'All Action Items'; virtualCard.appendChild(titleEl);
-                const contentArea = document.createElement('div'); contentArea.classList.add('content-area');
-                const list = document.createElement('ul'); list.classList.add('interactive-list', 'aggregated-todo-list');
-                aggregatedActionItems.forEach(aggItem => {
-                    const li = document.createElement('li'); li.classList.add('interactive-list-item'); if (aggItem.done) { li.classList.add('done'); }
-                    const checkbox = document.createElement('input'); checkbox.type = 'checkbox'; checkbox.checked = aggItem.done; checkbox.classList.add('list-item-checkbox');
-                    checkbox.dataset.noteIndex = aggItem.originalNoteIndex; // Use original note index
-                    checkbox.dataset.itemIndex = aggItem.originalItemIndex; // Use original item index
-                    checkbox.dataset.arrayKey = 'items'; // Always 'items' now
-                    checkbox.addEventListener('change', handleCheckboxChange);
-                    const textSpan = document.createElement('span'); textSpan.classList.add('list-item-text'); textSpan.textContent = aggItem.text;
-                    const contextSpan = document.createElement('span'); contextSpan.classList.add('list-item-context'); contextSpan.textContent = `(${aggItem.noteTitle})`; contextSpan.title = aggItem.noteTitle;
-                    li.appendChild(checkbox); li.appendChild(textSpan); li.appendChild(contextSpan); list.appendChild(li);
-                }); contentArea.appendChild(list); virtualCard.appendChild(contentArea);
-                notesGrid.appendChild(virtualCard); // Prepend virtual card
+
+            // Sort notes (pinned first, then by date)
+            notesToDisplay.sort((a, b) => {
+                if (a.pinned && !b.pinned) return -1;
+                if (!a.pinned && b.pinned) return 1;
+                const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+                const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+                return dateB - dateA;
+            });
+
+            if (notesToDisplay.length === 0) {
+                notesGrid.innerHTML = lowerSearchTerm || selectedTags.size > 0 
+                    ? '<p>No notes match the current filters.</p>' 
+                    : '<p>No notes yet.</p>';
+                return;
             }
 
-            // --- Render Regular Notes ---
-            let notesToDisplay = notes.filter(note => { /* ... filter logic ... */
-                const titleMatch = (note.title?.toLowerCase() || '').includes(lowerSearchTerm); const contentMatch = (note.content?.toLowerCase() || '').includes(lowerSearchTerm); const itemsMatch = (note.items || []).some(item => item.text?.toLowerCase().includes(lowerSearchTerm)); return titleMatch || contentMatch || itemsMatch;
-            });
-            notesToDisplay.sort((a, b) => { /* ... sort logic ... */
-                if (a.pinned && !b.pinned) return -1; if (!a.pinned && b.pinned) return 1; const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0; const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0; return dateB - dateA;
-            });
+            notesToDisplay.forEach(note => {
+                const originalIndex = notes.findIndex(n => n === note);
+                if (originalIndex === -1) return;
 
-            if (notesToDisplay.length === 0 && aggregatedActionItems.length === 0) { /* ... (empty message) ... */
-                 notesGrid.innerHTML = lowerSearchTerm ? '<p>No notes match search.</p>' : '<p>No notes yet.</p>'; return;
-            } else {
-                 notesToDisplay.forEach(note => {
-                    const originalIndex = notes.findIndex(n => n === note); if (originalIndex === -1) return;
-                    const card = document.createElement('div'); card.classList.add('note-card'); if (note.pinned) { card.classList.add('pinned'); } card.dataset.index = originalIndex;
-                    const titleEl = document.createElement('h3'); titleEl.textContent = note.title || '(No Title)'; card.appendChild(titleEl);
-                    const contentArea = document.createElement('div'); contentArea.classList.add('content-area'); let contentRendered = false;
-                    if (note.content) { const richContentDiv = document.createElement('div'); richContentDiv.innerHTML = note.content; contentArea.appendChild(richContentDiv); contentRendered = true; }
-                    if (Array.isArray(note.items) && note.items.length > 0) { if (contentRendered) { const todoHeader = document.createElement('h4'); todoHeader.textContent = "Action Items:"; todoHeader.classList.add('action-items-header'); contentArea.appendChild(todoHeader); } contentArea.appendChild(createInteractiveList(note.items, originalIndex, 'items')); contentRendered = true; }
-                    if (contentRendered) { card.appendChild(contentArea); }
-                    let metaContentExists = false; const metaEl = document.createElement('div'); metaEl.classList.add('meta');
-                    if (note.createdAt) { try { const createdAtSpan = document.createElement('span'); createdAtSpan.textContent = `Created: ${new Date(note.createdAt).toLocaleDateString()}`; metaEl.appendChild(createdAtSpan); metaContentExists = true; } catch (e) { console.warn("Could not parse creation date:", note.createdAt); } }
-                    if (note.deadline) { try { const deadlineSpan = document.createElement('span'); deadlineSpan.textContent = `Deadline: ${new Date(note.deadline + 'T00:00:00').toLocaleDateString()}`; metaEl.appendChild(deadlineSpan); metaContentExists = true; } catch (e) { console.warn("Could not parse deadline:", note.deadline); } }
-                    if (metaContentExists) { card.appendChild(metaEl); }
-                    const actionsContainer = document.createElement('div'); actionsContainer.classList.add('card-actions'); const hasContent = contentArea.hasChildNodes(); if (!metaContentExists && !hasContent) { actionsContainer.style.borderTop = '1px solid #f0f0f0'; } else if (!metaContentExists && hasContent) { actionsContainer.style.borderTop = '1px solid #f0f0f0'; } else { actionsContainer.style.borderTopColor = 'transparent'; actionsContainer.style.paddingTop = '0'; actionsContainer.style.marginTop = '5px';}
-                    const pinBtn = document.createElement('button'); pinBtn.classList.add('pin-btn'); /* ... pin button ... */ pinBtn.title = note.pinned ? "Unpin Note" : "Pin Note"; pinBtn.innerHTML = note.pinned ? `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pin-fill" viewBox="0 0 16 16"><path d="M4.146.146A.5.5 0 0 1 4.5 0h7a.5.5 0 0 1 .5.5c0 .68-.342 1.174-.646 1.479-.126.125-.25.224-.354.298v4.431l.078.048c.203.127.476.314.751.555C12.36 7.775 13 8.527 13 9.5a.5.5 0 0 1-.5.5h-4v4.5c0 .276-.224.5-.5.5s-.5-.224-.5-.5V10h-4a.5.5 0 0 1-.5-.5c0-.973.64-1.725 1.17-2.189A5.921 5.921 0 0 1 5 6.708V2.277a2.77 2.77 0 0 1-.354-.298C4.342 1.674 4 1.179 4 .5a.5.5 0 0 1 .146-.354z"/></svg>` : `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pin" viewBox="0 0 16 16"><path d="M4.146.146A.5.5 0 0 1 4.5 0h7a.5.5 0 0 1 .5.5c0 .68-.342 1.174-.646 1.479-.126.125-.25.224-.354.298v4.431l.078.048c.203.127.476.314.751.555C12.36 7.775 13 8.527 13 9.5a.5.5 0 0 1-.5.5h-4v4.5c0 .276-.224.5-.5.5s-.5-.224-.5-.5V10h-4a.5.5 0 0 1-.5-.5c0-.973.64-1.725 1.17-2.189A5.92 5.92 0 0 1 5 6.708V2.277a2.77 2.77 0 0 1-.354-.298C4.342 1.674 4 1.179 4 .5a.5.5 0 0 1 .146-.354zm1.58 1.408-.002-.001.002.001zm-.002-.001.002.001A.5.5 0 0 1 6 2v5a.5.5 0 0 1-.276.447l-.078.048a.5.5 0 0 1-.544.037L5 7.5l-.002-.001A.5.5 0 0 1 5 7V2a.5.5 0 0 1 .024-.158.5.5 0 0 1 .1-.1.5.5 0 0 1 .196-.12l.004-.002h-.001zm4.34 0 .001-.001-.001.001zm.001-.001-.001.001a.5.5 0 0 1-.196.12l-.004.002a.5.5 0 0 1-.1.1.5.5 0 0 1-.024.158v5a.5.5 0 0 1-.5.5l-.002.001a.5.5 0 0 1-.544-.037l-.078-.048A.5.5 0 0 1 10 7V2a.5.5 0 0 1 .146-.354l.004-.004Z"/></svg>`; if(note.pinned) pinBtn.classList.add('active'); pinBtn.onclick = (e) => { e.stopPropagation(); togglePinNote(originalIndex); }; actionsContainer.appendChild(pinBtn);
-                    const editBtn = document.createElement('button'); editBtn.classList.add('edit-btn'); /* ... edit button ... */ editBtn.title = "Edit Note"; editBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>`; editBtn.onclick = (e) => { e.stopPropagation(); openModalForEdit(originalIndex); }; actionsContainer.appendChild(editBtn);
-                    const deleteBtn = document.createElement('button'); deleteBtn.classList.add('delete-btn'); /* ... delete button ... */ deleteBtn.title = "Delete Note"; deleteBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>`; deleteBtn.onclick = (e) => { e.stopPropagation(); deleteNote(originalIndex); }; actionsContainer.appendChild(deleteBtn);
-                    card.appendChild(actionsContainer);
+                const card = document.createElement('div');
+                card.classList.add('note-card');
+                if (note.pinned) {
+                    card.classList.add('pinned');
+                }
+                card.dataset.index = originalIndex;
 
-                    notesGrid.appendChild(card);
-                });
-            }
+                const titleEl = document.createElement('h3');
+                titleEl.textContent = note.title || '(No Title)';
+                card.appendChild(titleEl);
+
+                const contentArea = document.createElement('div');
+                contentArea.classList.add('content-area');
+                let contentRendered = false;
+
+                if (note.content) {
+                    const richContentDiv = document.createElement('div');
+                    richContentDiv.innerHTML = note.content;
+                    contentArea.appendChild(richContentDiv);
+                    contentRendered = true;
+                }
+
+                if (Array.isArray(note.items) && note.items.length > 0) {
+                    if (contentRendered) {
+                        const todoHeader = document.createElement('h4');
+                        todoHeader.textContent = "Action Items:";
+                        todoHeader.classList.add('action-items-header');
+                        contentArea.appendChild(todoHeader);
+                    }
+                    contentArea.appendChild(createInteractiveList(note.items, originalIndex, 'items'));
+                    contentRendered = true;
+                }
+
+                if (contentRendered) {
+                    card.appendChild(contentArea);
+                }
+
+                // Add tags to the note card
+                if (note.tags && note.tags.length > 0) {
+                    const tagsContainer = document.createElement('div');
+                    tagsContainer.className = 'tag-container';
+                    note.tags.forEach(tag => {
+                        const tagEl = createTagElement(tag, false);
+                        tagEl.onclick = () => {
+                            if (selectedTags.has(tag)) {
+                                selectedTags.delete(tag);
+                            } else {
+                                selectedTags.add(tag);
+                            }
+                            updateTagFilterContainer();
+                            renderNotes(searchInput.value);
+                        };
+                        if (selectedTags.has(tag)) {
+                            tagEl.classList.add('selected');
+                        }
+                        tagsContainer.appendChild(tagEl);
+                    });
+                    card.appendChild(tagsContainer);
+                }
+
+                let metaContentExists = false;
+                const metaEl = document.createElement('div');
+                metaEl.classList.add('meta');
+
+                if (note.createdAt) {
+                    try {
+                        const createdAtSpan = document.createElement('span');
+                        createdAtSpan.textContent = `Created: ${new Date(note.createdAt).toLocaleDateString()}`;
+                        metaEl.appendChild(createdAtSpan);
+                        metaContentExists = true;
+                    } catch (e) {
+                        console.warn("Could not parse creation date:", note.createdAt);
+                    }
+                }
+
+                if (note.deadline) {
+                    try {
+                        const deadlineSpan = document.createElement('span');
+                        deadlineSpan.textContent = `Deadline: ${new Date(note.deadline + 'T00:00:00').toLocaleDateString()}`;
+                        metaEl.appendChild(deadlineSpan);
+                        metaContentExists = true;
+                    } catch (e) {
+                        console.warn("Could not parse deadline:", note.deadline);
+                    }
+                }
+
+                if (metaContentExists) {
+                    card.appendChild(metaEl);
+                }
+
+                const actionsContainer = document.createElement('div');
+                actionsContainer.classList.add('card-actions');
+                const hasContent = contentArea.hasChildNodes();
+                if (!metaContentExists && !hasContent) {
+                    actionsContainer.style.borderTop = '1px solid #f0f0f0';
+                } else if (!metaContentExists && hasContent) {
+                    actionsContainer.style.borderTop = '1px solid #f0f0f0';
+                } else {
+                    actionsContainer.style.borderTopColor = 'transparent';
+                    actionsContainer.style.paddingTop = '0';
+                    actionsContainer.style.marginTop = '5px';
+                }
+
+                const pinBtn = document.createElement('button');
+                pinBtn.classList.add('pin-btn');
+                pinBtn.title = note.pinned ? "Unpin Note" : "Pin Note";
+                pinBtn.innerHTML = note.pinned 
+                    ? `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pin-fill" viewBox="0 0 16 16"><path d="M4.146.146A.5.5 0 0 1 4.5 0h7a.5.5 0 0 1 .5.5c0 .68-.342 1.174-.646 1.479-.126.125-.25.224-.354.298v4.431l.078.048c.203.127.476.314.751.555C12.36 7.775 13 8.527 13 9.5a.5.5 0 0 1-.5.5h-4v4.5c0 .276-.224.5-.5.5s-.5-.224-.5-.5V10h-4a.5.5 0 0 1-.5-.5c0-.973.64-1.725 1.17-2.189A5.921 5.921 0 0 1 5 6.708V2.277a2.77 2.77 0 0 1-.354-.298C4.342 1.674 4 1.179 4 .5a.5.5 0 0 1 .146-.354z"/></svg>`
+                    : `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pin" viewBox="0 0 16 16"><path d="M4.146.146A.5.5 0 0 1 4.5 0h7a.5.5 0 0 1 .5.5c0 .68-.342 1.174-.646 1.479-.126.125-.25.224-.354.298v4.431l.078.048c.203.127.476.314.751.555C12.36 7.775 13 8.527 13 9.5a.5.5 0 0 1-.5.5h-4v4.5c0 .276-.224.5-.5.5s-.5-.224-.5-.5V10h-4a.5.5 0 0 1-.5-.5c0-.973.64-1.725 1.17-2.189A5.92 5.92 0 0 1 5 6.708V2.277a2.77 2.77 0 0 1-.354-.298C4.342 1.674 4 1.179 4 .5a.5.5 0 0 1 .146-.354zm1.58 1.408-.002-.001.002.001zm-.002-.001.002.001A.5.5 0 0 1 6 2v5a.5.5 0 0 1-.276.447l-.078.048a.5.5 0 0 1-.544.037L5 7.5l-.002-.001A.5.5 0 0 1 5 7V2a.5.5 0 0 1 .024-.158.5.5 0 0 1 .1-.1.5.5 0 0 1 .196-.12l.004-.002h-.001zm4.34 0 .001-.001-.001.001zm.001-.001-.001.001a.5.5 0 0 1-.196.12l-.004.002a.5.5 0 0 1-.1.1.5.5 0 0 1-.024.158v5a.5.5 0 0 1-.5.5l-.002.001a.5.5 0 0 1-.544-.037l-.078-.048A.5.5 0 0 1 10 7V2a.5.5 0 0 1 .146-.354l.004-.004Z"/></svg>`;
+                if(note.pinned) pinBtn.classList.add('active');
+                pinBtn.onclick = (e) => {
+                    e.stopPropagation();
+                    togglePinNote(originalIndex);
+                };
+                actionsContainer.appendChild(pinBtn);
+
+                const editBtn = document.createElement('button');
+                editBtn.classList.add('edit-btn');
+                editBtn.title = "Edit Note";
+                editBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>`;
+                editBtn.onclick = (e) => {
+                    e.stopPropagation();
+                    openModalForEdit(originalIndex);
+                };
+                actionsContainer.appendChild(editBtn);
+
+                const deleteBtn = document.createElement('button');
+                deleteBtn.classList.add('delete-btn');
+                deleteBtn.title = "Delete Note";
+                deleteBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>`;
+                deleteBtn.onclick = (e) => {
+                    e.stopPropagation();
+                    deleteNote(originalIndex);
+                };
+                actionsContainer.appendChild(deleteBtn);
+
+                card.appendChild(actionsContainer);
+                notesGrid.appendChild(card);
+            });
         }
 
         /** Helper function to create an interactive list UL element. */
@@ -468,15 +851,56 @@
              if (index < 0 || index >= notes.length) return; notes[index].pinned = !notes[index].pinned; saveNotesToLocalStorage(); renderNotes(searchInput.value);
         }
 
-        function handleSaveNote() { /* ... (unchanged) ... */
-            clearMessages(); const title = noteTitleInput.value.trim(); const deadline = noteDeadlineInput.value; const richContent = noteContentHiddenInput.value.trim(); const actionItemsText = noteActionItemsTextArea.value.trim(); const actionItemLines = actionItemsText.split('\n').filter(line => line.trim() !== '');
-            if (!title && richContent.length < 10 && actionItemLines.length === 0) { showMessage('Cannot save empty note.', true); return; }
-            const preserveDoneState = (newLines, oldItems) => { return newLines.map(lineText => { const existingItem = (oldItems || []).find(oldItem => oldItem.text === lineText); return { text: lineText, done: existingItem ? existingItem.done : false }; }); };
-            let oldItems = (currentlyEditingIndex !== null) ? notes[currentlyEditingIndex]?.items : []; const newItems = preserveDoneState(actionItemLines, oldItems);
-            const noteData = { title: title, content: richContent || null, items: newItems.length > 0 ? newItems : null, deadline: deadline || null }; let message = '';
-            if (currentlyEditingIndex !== null) { const updatedNote = { ...notes[currentlyEditingIndex], ...noteData }; notes[currentlyEditingIndex] = updatedNote; message = 'Note updated!'; }
-            else { const newNote = { ...noteData, createdAt: new Date().toISOString(), pinned: false }; notes.unshift(newNote); message = 'Note added!'; clearDraft(); }
-            currentlyEditingIndex = null; saveNotesToLocalStorage(); renderNotes(searchInput.value); closeModal(); showMessage(message, false);
+        function handleSaveNote() {
+            clearMessages();
+            const title = noteTitleInput.value.trim();
+            const deadline = noteDeadlineInput.value;
+            const richContent = noteContentHiddenInput.value.trim();
+            const actionItemsText = noteActionItemsTextArea.value.trim();
+            const actionItemLines = actionItemsText.split('\n').filter(line => line.trim() !== '');
+            const tags = getTagsFromContainer(document.getElementById('noteTagsContainer'));
+
+            if (!title && richContent.length < 10 && actionItemLines.length === 0 && tags.length === 0) {
+                showMessage('Cannot save empty note.', true);
+                return;
+            }
+
+            const preserveDoneState = (newLines, oldItems) => {
+                return newLines.map(lineText => {
+                    const existingItem = (oldItems || []).find(oldItem => oldItem.text === lineText);
+                    return { text: lineText, done: existingItem ? existingItem.done : false };
+                });
+            };
+
+            let oldItems = (currentlyEditingIndex !== null) ? notes[currentlyEditingIndex]?.items : [];
+            const newItems = preserveDoneState(actionItemLines, oldItems);
+
+            const noteData = {
+                title: title,
+                content: richContent || null,
+                items: newItems.length > 0 ? newItems : null,
+                deadline: deadline || null,
+                tags: tags.length > 0 ? tags : null
+            };
+
+            let message = '';
+            if (currentlyEditingIndex !== null) {
+                const updatedNote = { ...notes[currentlyEditingIndex], ...noteData };
+                notes[currentlyEditingIndex] = updatedNote;
+                message = 'Note updated!';
+            } else {
+                const newNote = { ...noteData, createdAt: new Date().toISOString(), pinned: false };
+                notes.unshift(newNote);
+                message = 'Note added!';
+                clearDraft();
+            }
+
+            currentlyEditingIndex = null;
+            saveNotesToLocalStorage();
+            updateTagFilterContainer();
+            renderNotes(searchInput.value);
+            closeModal();
+            showMessage(message, false);
         }
 
         function deleteNote(index) { /* ... (unchanged) ... */
@@ -499,6 +923,67 @@
             reader.onerror = (e) => { console.error("FileReader error:", e); showMessage(`Error reading file: ${reader.error}`, true); event.target.value = null; }; reader.readAsText(file);
         }
 
+        // --- Dark Mode Functions ---
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            const isDarkMode = document.body.classList.contains('dark-mode');
+            localStorage.setItem(DARK_MODE_KEY, isDarkMode);
+        }
+
+        function initializeDarkMode() {
+            const darkModeEnabled = localStorage.getItem(DARK_MODE_KEY) === 'true';
+            if (darkModeEnabled) {
+                document.body.classList.add('dark-mode');
+            }
+        }
+
+        // --- Keyboard Shortcuts ---
+        function handleKeyboardShortcuts(e) {
+            // Only handle keyboard shortcuts when not in edit mode
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'TRIX-EDITOR') {
+                return;
+            }
+
+            // Check for Ctrl/Cmd + key combinations
+            if (e.ctrlKey || e.metaKey) {
+                switch (e.key.toLowerCase()) {
+                    case 'n':
+                        e.preventDefault();
+                        openModalForAdd();
+                        break;
+                    case 's':
+                        if (noteModal.style.display === 'flex') {
+                            e.preventDefault();
+                            handleSaveNote();
+                        }
+                        break;
+                    case 'f':
+                        e.preventDefault();
+                        searchInput.focus();
+                        break;
+                    case 'e':
+                        e.preventDefault();
+                        toggleDarkMode();
+                        break;
+                }
+            }
+
+            // Handle single key shortcuts
+            switch (e.key) {
+                case 'Escape':
+                    if (noteModal.style.display === 'flex') {
+                        closeModal();
+                    }
+                    break;
+                case '/':
+                    if (!e.ctrlKey && !e.metaKey) {
+                        e.preventDefault();
+                        searchInput.focus();
+                    }
+                    break;
+            }
+        }
+
         // --- Event Listeners ---
         addNoteFab.addEventListener('click', openModalForAdd);
         closeModalBtn.addEventListener('click', closeModal);
@@ -512,11 +997,202 @@
         exportXmlBtn.addEventListener('click', exportNotesToXml);
         importXmlBtn.addEventListener('click', () => { importXmlInput.click(); });
         importXmlInput.addEventListener('change', importNotesFromXml);
+        document.getElementById('darkModeToggle').addEventListener('click', () => {
+            toggleDarkMode();
+            headerMenu.classList.remove('visible');
+        });
+        document.addEventListener('keydown', handleKeyboardShortcuts);
 
         // --- Initial Load ---
         document.addEventListener('trix-initialize', () => { console.log("Trix Initialized"); });
         notes = loadNotesFromLocalStorage(); // Load and migrate if necessary
+        initializeDarkMode();
+        updateTagFilterContainer();
         renderNotes();
+
+        // Add keyboard shortcut help to the menu
+        const keyboardShortcutsButton = document.createElement('button');
+        keyboardShortcutsButton.id = 'keyboardShortcutsBtn';
+        keyboardShortcutsButton.innerHTML = `
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="4" width="20" height="16" rx="2" ry="2"></rect>
+                <line x1="6" y1="8" x2="18" y2="8"></line>
+                <line x1="6" y1="12" x2="18" y2="12"></line>
+                <line x1="6" y1="16" x2="18" y2="16"></line>
+            </svg>
+            Keyboard Shortcuts
+        `;
+        headerMenu.insertBefore(keyboardShortcutsButton, headerMenu.firstChild);
+
+        // Add keyboard shortcuts help modal
+        const shortcutsModal = document.createElement('div');
+        shortcutsModal.id = 'shortcutsModal';
+        shortcutsModal.className = 'modal';
+        shortcutsModal.innerHTML = `
+            <div class="modal-content">
+                <span class="close-btn">&times;</span>
+                <h2>Keyboard Shortcuts</h2>
+                <div class="shortcuts-list">
+                    <div class="shortcut-item">
+                        <span class="shortcut-key">Ctrl/Cmd + N</span>
+                        <span class="shortcut-description">New note</span>
+                    </div>
+                    <div class="shortcut-item">
+                        <span class="shortcut-key">Ctrl/Cmd + S</span>
+                        <span class="shortcut-description">Save note</span>
+                    </div>
+                    <div class="shortcut-item">
+                        <span class="shortcut-key">Ctrl/Cmd + F</span>
+                        <span class="shortcut-description">Focus search</span>
+                    </div>
+                    <div class="shortcut-item">
+                        <span class="shortcut-key">Ctrl/Cmd + E</span>
+                        <span class="shortcut-description">Toggle dark mode</span>
+                    </div>
+                    <div class="shortcut-item">
+                        <span class="shortcut-key">/</span>
+                        <span class="shortcut-description">Focus search</span>
+                    </div>
+                    <div class="shortcut-item">
+                        <span class="shortcut-key">Esc</span>
+                        <span class="shortcut-description">Close modal</span>
+                    </div>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(shortcutsModal);
+
+        // Add styles for keyboard shortcuts
+        const style = document.createElement('style');
+        style.textContent = `
+            .shortcuts-list {
+                display: flex;
+                flex-direction: column;
+                gap: 15px;
+                margin-top: 20px;
+            }
+            .shortcut-item {
+                display: flex;
+                align-items: center;
+                gap: 20px;
+            }
+            .shortcut-key {
+                background-color: #f0f2f5;
+                padding: 5px 10px;
+                border-radius: 4px;
+                font-family: monospace;
+                min-width: 100px;
+                text-align: center;
+            }
+            .shortcut-description {
+                color: #666;
+            }
+            body.dark-mode .shortcut-key {
+                background-color: #3d3d3d;
+                color: #e0e0e0;
+            }
+            body.dark-mode .shortcut-description {
+                color: #a0a0a0;
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Add event listeners for keyboard shortcuts modal
+        document.getElementById('keyboardShortcutsBtn').addEventListener('click', () => {
+            shortcutsModal.style.display = 'flex';
+            headerMenu.classList.remove('visible');
+        });
+
+        shortcutsModal.querySelector('.close-btn').addEventListener('click', () => {
+            shortcutsModal.style.display = 'none';
+        });
+
+        // Close shortcuts modal when clicking outside
+        window.addEventListener('click', (e) => {
+            if (e.target === shortcutsModal) {
+                shortcutsModal.style.display = 'none';
+            }
+        });
+
+        // --- Tag Management Functions ---
+        function createTagElement(tag, isEditable = true) {
+            const tagEl = document.createElement('span');
+            tagEl.className = 'tag';
+            tagEl.textContent = tag;
+            
+            if (isEditable) {
+                const removeBtn = document.createElement('span');
+                removeBtn.className = 'remove-tag';
+                removeBtn.innerHTML = '&times;';
+                removeBtn.onclick = (e) => {
+                    e.stopPropagation();
+                    tagEl.remove();
+                };
+                tagEl.appendChild(removeBtn);
+            }
+            
+            return tagEl;
+        }
+
+        function updateTagFilterContainer() {
+            const allTags = new Set();
+            notes.forEach(note => {
+                if (note.tags) {
+                    note.tags.forEach(tag => allTags.add(tag));
+                }
+            });
+
+            const container = document.getElementById('tagFilterContainer') || (() => {
+                const newContainer = document.createElement('div');
+                newContainer.id = 'tagFilterContainer';
+                newContainer.className = 'tag-filter-container';
+                document.querySelector('.container').insertBefore(newContainer, notesGrid);
+                return newContainer;
+            })();
+
+            container.innerHTML = '';
+            allTags.forEach(tag => {
+                const tagEl = createTagElement(tag, false);
+                if (selectedTags.has(tag)) {
+                    tagEl.classList.add('selected');
+                }
+                tagEl.onclick = () => {
+                    if (selectedTags.has(tag)) {
+                        selectedTags.delete(tag);
+                        tagEl.classList.remove('selected');
+                    } else {
+                        selectedTags.add(tag);
+                        tagEl.classList.add('selected');
+                    }
+                    renderNotes(searchInput.value);
+                };
+                container.appendChild(tagEl);
+            });
+        }
+
+        function getTagsFromContainer(container) {
+            return Array.from(container.children)
+                .map(tagEl => tagEl.textContent.trim())
+                .filter(tag => tag);
+        }
+
+        // --- Event Listeners ---
+        document.getElementById('addTagBtn').addEventListener('click', () => {
+            const tagInput = document.getElementById('tagInput');
+            const tag = tagInput.value.trim();
+            if (tag) {
+                const tagsContainer = document.getElementById('noteTagsContainer');
+                const tagEl = createTagElement(tag);
+                tagsContainer.appendChild(tagEl);
+                tagInput.value = '';
+            }
+        });
+
+        document.getElementById('tagInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                document.getElementById('addTagBtn').click();
+            }
+        });
 
     </script>
 
